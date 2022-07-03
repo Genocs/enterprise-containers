@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: application-producer-service-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      run: rabbitmq-producer
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: http-port
+      path: /metrics
+      interval: 15s
+      scheme: http

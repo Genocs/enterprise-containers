@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  genocs.producer:
+    image: genocs/rabbitproducer:1.1
+    build:
+      context: src
+      dockerfile: Genocs.KubernetesCourse.WebApi.dockerfile
+
+  genocs.consumer:
+    image: genocs/rabbitconsumer:1.1
+    build:
+      context: src
+      dockerfile: Genocs.KubernetesCourse.Worker.dockerfile

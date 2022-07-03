@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  neo4j:
+    image: genocs/rabbitproducer:1.1
+    hostname: rabbitproducer
+    container_name: rabbitproducer
+    ports:
+      - 6001:80
+    networks:
+      - genocs
+    environment:
+      - RABBITMQ_HOST_NAME=rabbitmq
+      - RABBITMQ_USER_NAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_BATCH_SIZE=50
+
+networks:
+  genocs:
+    name: genocs-network
+    external: true

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: producer-ingress
+  namespace: default  
+spec:
+  rules:
+  - host: example.genocs.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rabbitmq-producer-service
+            port:
+              number: 80
+  ingressClassName: nginx

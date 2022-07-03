@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: rabbitmq-producer-deployment-v2
+  # namespace: default
+  labels:
+    run: rabbitmq-producer-v2
+    app: apprabbitproducer-v2
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: rabbitmq-producer-v2
+
+  template:
+    metadata:
+      labels:
+        run: rabbitmq-producer-v2
+    spec:
+      containers:
+        - name: applicationproducer-v2
+          image: genocs/rabbitproducer:1.0
+          env:
+            - name: RABBITMQ_HOST_NAME
+              value: "rabbitmq"
+            - name: RABBITMQ_USER_NAME
+              value: "user"
+            - name: RABBITMQ_PASSWORD
+              value: "PASSWORD"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "10m" #1% of a core
+              memory: "200Mi"
+            limits:
+              cpu: "50m" #5% of a core
+              memory: "500Mi"
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
