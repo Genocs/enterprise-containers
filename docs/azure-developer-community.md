@@ -10,8 +10,6 @@ Run the [deployAll](\Powershell\deployAll.ps1) Powershell script which setup eve
 .\deployAll.ps1
 ```
 
-
-
 ## Access RabbitMQ UI
 
 ``` bash
@@ -61,7 +59,6 @@ kubectl scale deployment rabbitmq-consumer-deployment --replicas=2
 ``` bash
 kubectl autoscale deployment rabbitmq-consumer-deployment --cpu-percent=75 --min=1 --max=10
 ```
-
 
 ## Verify KEDA Custom Resource Definitions
 

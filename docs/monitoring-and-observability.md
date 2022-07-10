@@ -1,4 +1,4 @@
-# Demo setup Monitoring and Observability for Kuberentes
+# Setup Monitoring and Observability
 
 Setup for Improve Monitoring and Observability for Kuberentes with OSS tools
 
@@ -21,14 +21,14 @@ Run the deployEFK Powershell script which will deploy Elasticsearch, FluentD and
 
 ## Access Kibana UI 
 
-``` PS
+``` bash
 kubectl port-forward --namespace default svc/kibana 5601:5601
 ```
 
 ## Access RabbitMQ UI
 
 ``` bash
-kubectl port-forward svc/rabbitmq 15672:15672
+kubectl port-forward --namespace default svc/rabbitmq 15672:15672
 ```
 
 Access the RabbitMQ UI with credential `user` & `PASSWORD`
@@ -64,7 +64,11 @@ Switch to the `mssql-server` branch
 
 ## Install Prometheus
 
-Run the Powershell script `install-prometheus.ps1` from powershell folder
+Run the Powershell script from powershell folder
+
+``` PS
+.\install-prometheus.ps1
+```
 
 Check Prometheus relates resources are installed correctly
 
@@ -143,12 +147,6 @@ for ($i =0; $i -lt 10; $i++)
 }
 ```
 
-## Generate load on the .Net Core TechTalks app
-
-``` bash
-http://20.198.210.175/api/TechTalks/Generate?numberOfMessages=5000
-```
-
 ---
 
 ## All the links used during the demo
@@ -160,7 +158,7 @@ http://20.198.210.175/api/TechTalks/Generate?numberOfMessages=5000
 - [Slideshare](https:/www.slideshare.net/nileshgule/)
 - [Speakerdeck](https://www.speakerdeck.com/NileshGule/)
 
-### other links
+### Other links
 - [Azure Singapore sessions](https://bit.ly/AzureSingaporeSessions)
 
 - [CNCF trail](https://github.com/cncf/trailmap)
