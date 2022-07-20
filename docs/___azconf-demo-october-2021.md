@@ -21,9 +21,7 @@ Run the Powershell script `install-prometheus.ps1` from powershell folder
 ## Get Custom Resource Definitions (CRD) for Prometheus
 
 ```bash
-
 kubectl get crd
-
 ```
 
 ## Setup Spring Boot app
@@ -34,9 +32,7 @@ Apply manifest files from the following folder `k8s` folder
 For Spring Boot conference app, apply the manifest files from the `k8s/prometheus-config` folder using the command
 
 ```bash
-
 kubectl apply -R -F .
-
 ```
 
 For TechTalks app, apply the manifest files from the `k8s/Prometheus` folder using the same command as above
@@ -44,13 +40,11 @@ For TechTalks app, apply the manifest files from the `k8s/Prometheus` folder usi
 ## Port forward Prometheus, Grafana & AlertManager services
 
 ```bash
-
 kubectl port-forward --namespace monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090
 
 kubectl port-forward --namespace monitoring svc/prometheus-kube-prometheus-alertmanager 9093:9093
 
 kubectl --namespace monitoring port-forward svc/prometheus-grafana 80:80
-
 ```
 ## Import Grafana dashboards
 
@@ -97,7 +91,6 @@ for ($i =0; $i -lt 10; $i++)
 ## Generate load on the .Net Core TechTalks app
 
 ```bash
-
 http://20.198.210.175/api/TechTalks/Generate?numberOfMessages=5000
 
 ```
@@ -105,15 +98,11 @@ http://20.198.210.175/api/TechTalks/Generate?numberOfMessages=5000
 ## Trigger Alert Manager Alert
 
 ```bash
-
-kubectl delete -f api-deployment.yml
-
+kubectl apply -f api-deployment.yml
 ```
 
 ## Remove Alert Manager trigger
 
 ```bash
-
-kubectl apply -f api-deployment.yml
-
+kubectl delete -f api-deployment.yml
 ```

@@ -1,8 +1,11 @@
 # Enterprise level Kubernetes setup 
 
-Setup a Kubernetes solution at enterprise lever require to take in consideration many topics.
 
- This repository contains different ways to implement the solution.
+![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
+
+Setup a Kubernetes solution at enterprise level require to take in consideration many topics.
+
+ This repository contains useful tool and procedure to setup the solution.
 
 
 ## Introduction
@@ -29,14 +32,25 @@ Cluster monitoring is based on:
 - Jaeger
 
 
-### Security
+### Security and Networking
+Security and Networking context will implement all the components that allows to handle routing, requests to different services using a reverse proxy, to secure APIs calls using SSL termination. 
 
+The main components are: 
 - Api Gateway 
 - Ingress Controller
 
-Both these topic are based on `Kong`.
 
-Authentication and authorization are implemented using `OAuth2`. `Kong` provide plugin to implement this component.
+There are different products out of the box that can be used to implement the solution. All of them have PROS and CONS.
+
+The most used are:
+
+- Azure AGIC (Only for Azure)
+- NGNIX
+- [Kong](https://konghq.com/)
+
+In this solution the first choice is based on `Kong`.
+
+Authentication and authorization are implemented using `OAuth2`. `Kong` provides plugin that streamline the implementation.
 
 - [Kong](https://konghq.com/)
 - [OAuth2](https://oauth.net/2/)
@@ -46,7 +60,7 @@ Authentication and authorization are implemented using `OAuth2`. `Kong` provide 
 
 There are multiple options for scaling with Kubernetes and containers in general.
 
-Here we are going to use `Kubernetes-based Event Driven Autoscaling (KEDA)`.
+Here we are going to use `(KEDA) Kubernetes-based Event Driven Autoscaling`.
 
 RabbitMQ is used as an event source.
 
@@ -69,11 +83,11 @@ Similarly, if you do not wish to execute the Powershell scripts, you can execute
 
 Contains the docker compose files to install on docker a bunch of enterprise level tools.
 
-Please refere to [README](/docker-compose/README.md) file for details.
+Please refere to this [README](/docker-compose/README.md) for details.
 
 ## [docs](docs)
 
-Contains the explanaition files.
+Contains the explanation files.
 
 - [aks-preview](aks-preview.md) 
 - [azure-developer-community](azure-developer-community.md) 
@@ -93,6 +107,10 @@ Contains the source code for a model class used by two services:
 
 Both the Producer and Consumer uses the common data model.
 
+**NOTE:**
+
+The RabbitMQ cluster is installed inside the same kubernetes cluster.
+
 In order to build these using Dockerfile:
 - [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile)
 
@@ -100,7 +118,9 @@ In order to build these using Dockerfile:
 
 These can be built and are ready to be pushed to Azure Container Registry or DockerHub registry.
 
-[docker-compose-acr](/src/docker-compose-acr.yml) [docker-compose-dockerhub](/src/docker-compose-dockerhub.yml)
+[docker-compose ACR](/src/docker-compose-acr.yml)
+
+[docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
 
 The docker images can be built using the following command:
 
@@ -116,7 +136,7 @@ Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Defa
 
 ## [Powershell](Powersehll)
 
-Contains the helper Powershell scripts to provision AKS cluster, to proxy into the Kubernetes control plane, to deploy the application, to delete the application and to delete the resource group.
+Contains the helper Powershell scripts to: provisioning the AKS cluster, to proxy into the Kubernetes control plane, to deploy the application, to delete the application and to delete the resource group.
 
 ## [k8s](k8s)
 
@@ -300,4 +320,4 @@ Here some of them:
 - [NileshGule](https://github.com/NileshGule/)
 - [DevMentors](https://github.com/devmentors/)
 
-I'm sure I miss some of them (I'll fill the missing info) sorry for that.
+I'm sure I miss some of them (I'll fill the missing info) sorry for this.

@@ -4,11 +4,11 @@ helm repo update
 
 Write-Host "Initializing KONG Ingress on AKS cluster using Helm" -ForegroundColor Green
 
-kubectl create namespace kong-ingress
+kubectl create namespace kong
 
 # Use Helm to deploy an KONG ingress controller
 helm install kong/kong `
-    --namespace kong-ingress `
+    --namespace kong `
     --generate-name `
     --set ingressController.installCRDs=false
 

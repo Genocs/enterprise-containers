@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.9'
 
 services:
   neo4j:
@@ -6,9 +6,9 @@ services:
     hostname: nhp_neo4j ## The name of the image
     container_name: neo4j_db
     ports: ## publish ports to have Web UI
-      - "17474:7474"
-      - "7687:7687"
-      - "7474:7474"
+      - 17474:7474
+      - 7687:7687
+      - 7474:7474
     volumes: ## adds folder with login/password
       - neo4j_data:/data ## local data ./neo4j/data:/data
       - neo4j_logs:/logs ## local logs ./neo4j/logs:/logs

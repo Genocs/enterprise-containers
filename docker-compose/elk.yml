@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.9'
 
 services:
   elasticsearch:
@@ -30,7 +30,7 @@ services:
       SERVER_NAME: kibana.local
       ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - genocs
 
@@ -38,7 +38,7 @@ services:
     image: "mobz/elasticsearch-head:5"
     container_name: head
     ports:
-      - "9100:9100"
+      - 9100:9100
     networks:
       - genocs
 
