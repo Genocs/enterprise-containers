@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    # image: masstransit/rabbitmq
+    image: masstransit/rabbitmq #RabbitMQ with delayed exchange
+
     hostname: rabbit_node_1
     container_name: rabbitmq
     ports:

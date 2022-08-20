@@ -1,14 +1,14 @@
 # Docker compose
 
-Docker compose folder contains everything required to setup an entire echosystem from scratch
+Docker compose folder contains everything required to setup an entire ecosystem from scratch
 
 The folder contains:
  - bare.yml
  - monitor.yml
+ - networking.yml
  - elk.yml
  - sqldb.yml
  - neo4jdb.yml
-
 
  ## Bare
 
@@ -18,12 +18,14 @@ The folder contains:
  - MongoDB
 
 ``` Powershell
-docker-compose -f ./docker/bare.yml up -d
+docker-compose -f ./bare.yml up -d
 ```
 
 ### RabbitMQ
 
-http://localhost:15672 guest/guest
+Check Rabbit console at:
+
+[Rabbit Local](http://localhost:15672) guest/guest
 
 ### Redis cache
 
@@ -39,18 +41,42 @@ TBV
  ## Monitor
 
  monitor.yml file allows to run:
- - Consul
- - Fabio
  - Grafana
  - Promotheus
- - Vault
  - Jaeger
  - InfluxDb
  - Seq
 
 ``` Powershell
-docker-compose -f ./docker/monitor.yml up -d
+docker-compose -f ./monitor.yml up -d
 ```
+
+
+ ## Networking
+
+ monitor.yml file allows to run:
+ - Consul
+ - Fabio
+ - Vault
+
+``` Powershell
+docker-compose -f ./networking.yml up -d
+```
+
+ ## Elastic Stack
+
+ ELK allows to run:
+ - Elastic Search
+ - Kibana
+ - LogStash
+ - head plugin
+
+ with Elastic Search healthcheck
+
+``` Powershell
+docker-compose -f ./elk.yml up -d
+```
+
 
  ## Sql Server
 
@@ -58,7 +84,7 @@ docker-compose -f ./docker/monitor.yml up -d
  - Microsoft SQL Server Database
 
 ``` Powershell
-docker-compose -f ./docker/sqldb.yml up -d
+docker-compose -f ./sqldb.yml up -d
 ```
 
  ## neo4j Database
@@ -67,5 +93,5 @@ docker-compose -f ./docker/sqldb.yml up -d
  - Neo4j Community Database
 
 ``` Powershell
-docker-compose -f ./docker/neo4jdb.yml up -d
+docker-compose -f ./neo4jdb.yml up -d
 ```

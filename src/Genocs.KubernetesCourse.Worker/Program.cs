@@ -1,17 +1,15 @@
-﻿using Prometheus;
-using System;
-using System.IO;
+﻿using Genocs.KubernetesCourse.Worker.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Genocs.KubernetesCourse.Worker.Messaging;
+using Prometheus;
+using System;
+using System.IO;
 
 namespace Genocs.KubernetesCourse.Worker;
 
 class Program
 {
     static IConfiguration Configuration;
-
-    private static readonly Counter TickTock = Metrics.CreateCounter("sampleapp_ticks_total", "Just keeps on ticking");
 
     static void Main(string[] args)
     {
