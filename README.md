@@ -148,6 +148,16 @@ Contains the Helm RBAC enabling yaml file which add the Cluster Role Binding for
 
 This was required before Helm 3.0 for the Tiller service. With helm 3.0, Tiller is no longer required.
 
+## [terraform](terraform)
+
+Contains the terraform Kubernetes cluster setup.
+
+## [skaffold](skaffold)
+
+The Skaffold and Kaniko Kubernetes cluster setup.
+This allows to setup Kubernetes cluster on Google Cloud. 
+
+
 ---
 
 ## 2 - Setup
