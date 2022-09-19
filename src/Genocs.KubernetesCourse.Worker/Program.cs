@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
 using System;
-using System.IO;
 
 namespace Genocs.KubernetesCourse.Worker;
 
@@ -31,10 +30,10 @@ class Program
     {
         string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile($"appsettings.{environment}.json", optional: true)
-            .AddEnvironmentVariables();
+        var builder = new ConfigurationBuilder();
+        //    .SetBasePath(Directory.GetCurrentDirectory())
+        //    .AddJsonFile($"appsettings.{environment}.json", optional: true)
+        //    .AddEnvironmentVariables();
 
         Configuration = builder.Build();
 

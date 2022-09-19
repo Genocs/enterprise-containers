@@ -1,8 +1,6 @@
 ﻿using Genocs.KubernetesCourse.Contracts;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Genocs.KubernetesCourse.WebApi.Messaging;
