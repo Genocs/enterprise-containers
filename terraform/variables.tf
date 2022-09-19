@@ -3,13 +3,13 @@ variable "client_secret" {}
 
 variable "cluster_name" {
   type        = string
-  description = "The cluster name." 
-  default     = "genocs"
+  description = "The cluster name" 
+  default     = "aks-genocs"
 }
 
 variable "location" {
   type        = string
-  description = "The Azure location to use." 
+  description = "The Azure location to use" 
   default     = "westeurope"
 }
 

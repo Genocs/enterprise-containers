@@ -5,7 +5,7 @@
 
 Setup a Kubernetes solution at enterprise level require to take in consideration many topics.
 
- This repository contains useful tool and procedure to setup the solution.
+ This repository contains useful tools and procedures your kubernetes cluster.
 
 
 ## Introduction
@@ -26,14 +26,15 @@ Bare components allow to setup Kubernetes cluster tackling the following compone
 
 ### Monitoring
 
-Cluster monitoring is based on:
-- Promotheus
-- Grafana
-- Jaeger
+This solution will use the components shown below to implement both infrastructure and application monitoring:
+- [Grafana](https://grafana.com/)
+- [Jaeger](https://www.jaegertracing.io/)
+- [Promotheus](https://prometheus.io/)
 
+Most  of these tools are open source. The enterprice version require an active subscription or to pay a fee.  
 
 ### Security and Networking
-Security and Networking context will implement all the components that allows to handle routing, requests to different services using a reverse proxy, to secure APIs calls using SSL termination. 
+Security and Networking context will implement all the components that allows to handle routing, to send requests to services troughout a reverse proxy, secure APIs calls using SSL termination. 
 
 The main components are: 
 - Api Gateway 
@@ -44,25 +45,29 @@ There are different products out of the box that can be used to implement the so
 
 The most used are:
 
-- Azure AGIC (Only for Azure)
-- NGNIX
+- [Azure AGIC](https://learn.microsoft.com/en-us/azure/application-gateway/ingress-controller-install-new)
+- [NGNIX](https://www.nginx.com/)
 - [Kong](https://konghq.com/)
 
 In this solution the first choice is based on `Kong`.
 
-Authentication and authorization are implemented using `OAuth2`. `Kong` provides plugin that streamline the implementation.
+Authentication and authorization are implemented using `OAuth2`. 
+
+`Kong` provides plugin that streamline the implementation.
 
 - [Kong](https://konghq.com/)
 - [OAuth2](https://oauth.net/2/)
 - [OpenId](https://openid.net/connect/)
+
 ---
+
 ## KEDA - Kubernetes-based Event Driven Autoscaling
 
-There are multiple options for scaling with Kubernetes and containers in general.
+There are multiple options for scaling Kubernetes and containers in general.
 
 Here we are going to use `(KEDA) Kubernetes-based Event Driven Autoscaling`.
 
-RabbitMQ is used as an event source.
+RabbitMQ is used as the event source.
 
 ## Prerequisites
 
@@ -124,13 +129,13 @@ These can be built and are ready to be pushed to Azure Container Registry or Doc
 
 The docker images can be built using the following command:
 
-``` PS
+``` ps
 Measure-Command { docker-compose -f docker-compose-dockerhub.yml build | Out-Default }
 ```
 
 Once the images are built successfully, we can push them to the DockerHub registry using the command
 
-``` PS
+``` ps
 Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Default }
 ```
 

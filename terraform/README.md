@@ -4,16 +4,18 @@ This section describes about standing up the AKS using terraform.
 
 ## Pre-requisites
 
-1 Terraform v1.2.x+. Install instructions [hashicorp terraform](https://learn.hashicorp.com/terraform/getting-started/install.html).  
-2 Setup Terraform with Azure. Follow the instructions [here](https://docs.microsoft.com/en-us/azure/developer/terraform/install-configure)
-3 Make sure you have the following environment variables defined.
+1. Terraform v1.2.x+. Install instructions [hashicorp terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
+
+2. Setup Terraform with Azure. Follow the instructions [here](https://docs.microsoft.com/en-us/azure/developer/terraform/install-configure)
+3. Make sure you have the following environment variables defined.
+
 
 ``` bash
 # Your subscription ID
 ARM_SUBSCRIPTION_ID=<your subscription ID>
 ARM_TENANT_ID=<your_tenant_id>
 ARM_CLIENT_SECRET=<your_client_secret>
-ARM_CLIENT_ID=>your_client_id>
+ARM_CLIENT_ID=<your_client_id>
 ```
 
 ## Bootstrapping
@@ -25,10 +27,11 @@ TF_VAR_client_id=<The same as the one defined for ARM_CLIENT_ID>
 TF_VAR_client_secret=<The same as the one defined for ARM_CLIENT_SECRET>
 ```
 
-**Please note that the case matters. `client_id` and `client_secret` must be in small letters.**
+**Please note that the case matters**
+
+`client_id` and `client_secret` must be in small letters.
 
 Steps:
-
 * Go to directory `terraform`.
 * Modify the `variables.tf` file so suit your needs.
 
@@ -84,16 +87,17 @@ variable "ssh_public_key" {
 
 Once the variables are ready, you are ready to go!
 
-1. Check what terraform will create for you.
 
 ``` bash
+# 1. Check what terraform will create for you
 terraform plan
-```
 
-2. Apply the plan
- 
-``` bash
+# 2. Apply the plan
 terraform apply
+
+# 3. Destroying the cluster
+#    Once you are ready to destroy the cluster, simply execute
+terraform destroy
 ```
 
 You will be asked to continue or not.
@@ -139,12 +143,4 @@ users:
     client-certificate-data: [REDACTED]
     client-key-data: [REDACTED]
     token: [REDACTED]
-```
-
-## Destroying the cluster
-
-Once you are ready to destroy the cluster, simply execute
-
-``` bash
-terraform destroy
 ```
