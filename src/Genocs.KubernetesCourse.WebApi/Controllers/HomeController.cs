@@ -20,5 +20,4 @@ public class HomeController : Controller
     {
         return Ok("Welcome to Kubernates course!");
     }
-
 }

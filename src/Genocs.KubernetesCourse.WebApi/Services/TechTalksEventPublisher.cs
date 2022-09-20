@@ -1,9 +1,10 @@
 ﻿using Genocs.KubernetesCourse.Contracts;
+using Genocs.KubernetesCourse.WebApi.Services.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace Genocs.KubernetesCourse.WebApi.Messaging;
+namespace Genocs.KubernetesCourse.WebApi.Services;
 
 public class TechTalksEventPublisher : ITechTalksEventPublisher
 {

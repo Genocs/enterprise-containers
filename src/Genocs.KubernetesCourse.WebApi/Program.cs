@@ -1,4 +1,5 @@
-﻿using Genocs.KubernetesCourse.WebApi.Messaging;
+﻿using Genocs.KubernetesCourse.WebApi.Services;
+using Genocs.KubernetesCourse.WebApi.Services.Interfaces;
 using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
@@ -28,6 +29,10 @@ builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((mo
 // Azure Application Insight configuration - END
 
 builder.Services.AddControllers();
+
+// Add services to the container.
+//builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<InternalApiClient>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

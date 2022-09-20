@@ -1,3 +1,4 @@
+using Genocs.KubernetesCourse.Internal.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Genocs.KubernetesCourse.Internal.WebApi.Controllers;
@@ -20,6 +21,13 @@ public class HomeController : Controller
         => Ok("Internal call it's OK!");
 
     [HttpPost("PostInternal")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderCreated))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult PostInternal()
-        => Ok("Internal call it's OK!");
+        =>  Ok(new OrderCreated {
+                                OrderId = Guid.NewGuid().ToString(),
+                                EmissionDate = DateTime.UtcNow,
+                                Amount = 10.0M
+                            });
+
 }

@@ -1,4 +1,4 @@
-namespace Genocs.KubernetesCourse.WebApi.Model;
+namespace Genocs.KubernetesCourse.WebApi.Models;
 
 public class Level
 {

@@ -1,6 +1,7 @@
 using Bogus;
 using Genocs.KubernetesCourse.Contracts;
-using Genocs.KubernetesCourse.WebApi.Messaging;
+using Genocs.KubernetesCourse.WebApi.Services;
+using Genocs.KubernetesCourse.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,10 +12,12 @@ namespace Genocs.KubernetesCourse.WebApi.Controllers;
 public class TechTalksController : Controller
 {
     private readonly ITechTalksEventPublisher _messageQueue;
+    private readonly InternalApiClient _internalApiClient;
 
-    public TechTalksController(ITechTalksEventPublisher messageQueue)
+    public TechTalksController(ITechTalksEventPublisher messageQueue, InternalApiClient internalApiClient)
     {
-        _messageQueue = messageQueue;
+        _messageQueue = messageQueue ?? throw new ArgumentNullException(nameof(messageQueue));
+        _internalApiClient = internalApiClient ?? throw new ArgumentNullException(nameof(internalApiClient));
     }
 
     // GET: api/TechTalks
@@ -85,8 +88,10 @@ public class TechTalksController : Controller
     }
 
     [HttpGet("GetFromInternalApi")]
-    public IActionResult GetFromInternalApi(int numberOfMessages)
-    {
-        return Ok();
-    }
+    public async Task<IActionResult> GetFromInternalApi()
+        => Ok(await _internalApiClient.GetInternalAsync());
+
+    [HttpGet("PostFromInternalApi")]
+    public async Task<IActionResult> PostFromInternalApi()
+        => Ok(await _internalApiClient.PostInternalAsync());
 }

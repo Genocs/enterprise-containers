@@ -1,7 +1,6 @@
 using Genocs.KubernetesCourse.Contracts;
-using System.Collections.Generic;
 
-namespace Genocs.KubernetesCourse.WebApi.Messaging;
+namespace Genocs.KubernetesCourse.WebApi.Services.Interfaces;
 
 public interface ITechTalksEventPublisher
 {
