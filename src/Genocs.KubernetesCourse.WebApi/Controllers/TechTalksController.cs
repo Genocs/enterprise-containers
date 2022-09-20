@@ -83,4 +83,10 @@ public class TechTalksController : Controller
         _messageQueue.SendMessages(dummyTechTalks);
         return Ok();
     }
+
+    [HttpGet("GetFromInternalApi")]
+    public IActionResult GetFromInternalApi(int numberOfMessages)
+    {
+        return Ok();
+    }
 }

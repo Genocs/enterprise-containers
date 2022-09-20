@@ -1,23 +1,23 @@
-# Enterprise level Kubernetes setup 
-
+# Enterprise level Kubernetes setup
 
 ![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
 
 Setup a Kubernetes solution at enterprise level require to take in consideration many topics.
 
- This repository contains useful tools and procedures your kubernetes cluster.
-
+ This repository contains useful tools and procedures to setup your Kubernetes cluster.
 
 ## Introduction
 
-We can split the setup process into different context:
-- Bare components
-- Monitoring
+The setup process can be spitted into different steps:
+
+- Bare setup
 - Security
+- Scaling
+- Monitoring
 
-### Bare components
+### Setup (plus Securing and Scaling)
 
-Bare components allow to setup Kubernetes cluster tackling the following components:
+During this step we are going to setup Kubernetes cluster tackling the following components:
 
 - Setup the cluster
 - Secure secrets hiding sensitive data
@@ -26,24 +26,26 @@ Bare components allow to setup Kubernetes cluster tackling the following compone
 
 ### Monitoring
 
-This solution will use the components shown below to implement both infrastructure and application monitoring:
+The monitoring will be implemented with the components shown below. The implementation will monitor both infrastructure and application side:
+
 - [Grafana](https://grafana.com/)
 - [Jaeger](https://www.jaegertracing.io/)
 - [Promotheus](https://prometheus.io/)
 
-Most  of these tools are open source. The enterprice version require an active subscription or to pay a fee.  
+Most of these tools are open source. The entreprise version require an active subscription or to pay a fee.  
 
 ### Security and Networking
-Security and Networking context will implement all the components that allows to handle routing, to send requests to services troughout a reverse proxy, secure APIs calls using SSL termination. 
 
-The main components are: 
-- Api Gateway 
+Security and Networking context will implement all the components that allows to handle routing, to send requests to services throughout a reverse proxy, secure APIs calls using SSL termination.
+
+The main components are:
+
+- Api Gateway
 - Ingress Controller
 
+There are various products out of the box that can be used to implement the solution. All of them have PROS and CONS.
 
-There are different products out of the box that can be used to implement the solution. All of them have PROS and CONS.
-
-The most used are:
+The most used ones are:
 
 - [Azure AGIC](https://learn.microsoft.com/en-us/azure/application-gateway/ingress-controller-install-new)
 - [NGNIX](https://www.nginx.com/)
@@ -51,11 +53,8 @@ The most used are:
 
 In this solution the first choice is based on `Kong`.
 
-Authentication and authorization are implemented using `OAuth2`. 
+Authentication and authorization are implemented using `OAuth2`. `Kong` provides plugin that streamline the implementation.
 
-`Kong` provides plugin that streamline the implementation.
-
-- [Kong](https://konghq.com/)
 - [OAuth2](https://oauth.net/2/)
 - [OpenId](https://openid.net/connect/)
 
@@ -65,22 +64,22 @@ Authentication and authorization are implemented using `OAuth2`.
 
 There are multiple options for scaling Kubernetes and containers in general.
 
-Here we are going to use `(KEDA) Kubernetes-based Event Driven Autoscaling`.
+Here `(KEDA) Kubernetes-based Event Driven Autoscaling` will be used.
 
 RabbitMQ is used as the event source.
 
 ## Prerequisites
 
-- Azure Susbscription to create AKS cluster
+- Azure Susbscription
 - kubectl logged into kubernetes cluster
 - Powershell
 - Postman
 - Helm
 - DockerHub account (optional)
 
-If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1` of provisioning the cluster and [install KEDA](https://github.com/kedacore/keda#setup) on your own kubernetes cluster.
+If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1` of provisioning the cluster and [install KEDA](https://github.com/kedacore/keda#setup) on your own Kubernetes cluster.
 
-Similarly, if you do not wish to execute the Powershell scripts, you can execute the commands which are part of those scripts manually.
+Similarly, if you do not wish to execute the PowerShell scripts, you can execute the commands which are part of those scripts manually.
 
 ## 1 - Code organization
 
@@ -94,10 +93,10 @@ Please refere to this [README](/docker-compose/README.md) for details.
 
 Contains the explanation files.
 
-- [aks-preview](aks-preview.md) 
-- [azure-developer-community](azure-developer-community.md) 
-- [minikube-wsl2](minikube-wsl2.md) 
-- [monitoring-and-observability](monitoring-and-observability.md) 
+- [aks-preview](aks-preview.md)
+- [azure-developer-community](azure-developer-community.md)
+- [minikube-wsl2](minikube-wsl2.md)
+- [monitoring-and-observability](monitoring-and-observability.md)
 
 ## [src](src)
 
@@ -117,11 +116,11 @@ Both the Producer and Consumer uses the common data model.
 The RabbitMQ cluster is installed inside the same kubernetes cluster.
 
 In order to build these using Dockerfile:
-- [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile)
 
+- [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile)
 - [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile)
 
-These can be built and are ready to be pushed to Azure Container Registry or DockerHub registry.
+You can build them and they are ready to be pushed to Azure Container Registry or DockerHub.
 
 [docker-compose ACR](/src/docker-compose-acr.yml)
 
@@ -141,7 +140,13 @@ Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Defa
 
 ## [Powershell](Powersehll)
 
-Contains the helper Powershell scripts to: provisioning the AKS cluster, to proxy into the Kubernetes control plane, to deploy the application, to delete the application and to delete the resource group.
+Contains the helper PowerShell scripts to:
+
+- Provisioning the AKS cluster
+- To proxy into the Kubernetes control plane
+- To deploy the application
+- To delete the application
+- To delete the resource group (**AKS is expensive to keep alive**)
 
 ## [k8s](k8s)
 
@@ -155,13 +160,13 @@ This was required before Helm 3.0 for the Tiller service. With helm 3.0, Tiller 
 
 ## [terraform](terraform)
 
-Contains the terraform Kubernetes cluster setup.
+Contains the terraform Kubernetes cluster setup. The setup is primary meant to be used on Azure. Anyway, deploy on other cloud Provider is quite straightforward.
 
 ## [skaffold](skaffold)
 
 The Skaffold and Kaniko Kubernetes cluster setup.
-This allows to setup Kubernetes cluster on Google Cloud. 
 
+This allows to setup Kubernetes cluster on Google Cloud.
 
 ---
 
@@ -177,7 +182,9 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 
 **Note:**
 
-The default options can be overwritten by passing arguments to the initializeAKS script. In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
+The default options can be overwritten by passing arguments to the initializeAKS script. 
+
+In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
 
 ``` PS
 .\Powershell\initilaizeAKS `

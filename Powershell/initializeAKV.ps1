@@ -71,6 +71,9 @@ $identity = az identity show `
 Write-Host "Principal ID: " + $identity.principalId
 Write-Host "Client ID: " + $identity.clientId
 
+Write-Host "Please update the SecretProviderClass accordingly" -ForegroundColor Green
+
+
 Write-Host "Setting policy to access secrets in Key Vault with Client Id"
 az keyvault set-policy `
     --name $akvName `
