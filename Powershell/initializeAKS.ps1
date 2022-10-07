@@ -48,18 +48,27 @@ if ($aksCounts -eq 0) {
         --node-count=$workerNodeCount `
         --node-vm-size=$kubernetesVMSize `
         --enable-addons azure-keyvault-secrets-provider `
+        --enable-addons monitoring `
         --enable-managed-identity `
         --generate-ssh-keys `
+        --enable-pod-identity `
         --output=jsonc `
         --kubernetes-version=$kubernetesVersion `
         --attach-acr=$acrRegistryName 
     # --aks-custom-headers="CustomizedUbuntu=aks-ubuntu-1804,ContainerRuntime=containerd" `
+
+    # Enable pod Identity as standalone command
+    # az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity
+
+    # Attach existing AKS to ACR
+    # az aks update -g $resourceGroupName -n $clusterName --attach-acr $acrRegistryName
 
     #check the status of last command
     if (!$?) {
         Write-Error "Error creating ASK cluster" -ErrorAction Stop
     }
 }
+
 
 # Get AKS credentials for newly created cluster
 # needed to connect to AKS
