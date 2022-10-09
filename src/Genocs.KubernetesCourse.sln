@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genocs.KubernetesCourse.Contracts", "Genocs.KubernetesCourse.Contracts\Genocs.KubernetesCourse.Contracts.csproj", "{789DC5ED-FB8D-43E1-8271-F8A2F55A4C60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.KubernetesCourse.Contracts", "Genocs.KubernetesCourse.Contracts\Genocs.KubernetesCourse.Contracts.csproj", "{789DC5ED-FB8D-43E1-8271-F8A2F55A4C60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genocs.KubernetesCourse.Worker", "Genocs.KubernetesCourse.Worker\Genocs.KubernetesCourse.Worker.csproj", "{A3B58ABF-6884-4EAD-B565-61518219971C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.KubernetesCourse.Worker", "Genocs.KubernetesCourse.Worker\Genocs.KubernetesCourse.Worker.csproj", "{A3B58ABF-6884-4EAD-B565-61518219971C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genocs.KubernetesCourse.WebApi", "Genocs.KubernetesCourse.WebApi\Genocs.KubernetesCourse.WebApi.csproj", "{ABE0B3CA-523A-41EE-91EF-A0A9AE920625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.KubernetesCourse.WebApi", "Genocs.KubernetesCourse.WebApi\Genocs.KubernetesCourse.WebApi.csproj", "{ABE0B3CA-523A-41EE-91EF-A0A9AE920625}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.KubernetesCourse.Internal.WebApi", "Genocs.KubernetesCourse.Internal.WebApi\Genocs.KubernetesCourse.Internal.WebApi.csproj", "{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{789DC5ED-FB8D-43E1-8271-F8A2F55A4C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -58,5 +57,23 @@ Global
 		{ABE0B3CA-523A-41EE-91EF-A0A9AE920625}.Release|x64.Build.0 = Release|Any CPU
 		{ABE0B3CA-523A-41EE-91EF-A0A9AE920625}.Release|x86.ActiveCfg = Release|Any CPU
 		{ABE0B3CA-523A-41EE-91EF-A0A9AE920625}.Release|x86.Build.0 = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|x64.Build.0 = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C77BCDE-C954-459C-B00B-1C9ED3F1AE5F}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE56E084-BE25-4E34-8F77-F1F15F483669}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Genocs.KubernetesCourse.Contracts
+﻿namespace Genocs.KubernetesCourse.Contracts
 {
     public class Level
     {

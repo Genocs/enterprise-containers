@@ -1,29 +1,6 @@
-version: "3.8"
+version: '3.9'
 
 services:
-  consul:
-    image: consul
-    container_name: consul
-    ports:
-      - 8500:8500
-    networks:
-      - genocs
-    # network_mode: host
-    volumes:
-      - consul:/consul/data
-
-  fabio:
-    image: fabiolb/fabio
-    container_name: fabio
-    environment:
-      - FABIO_REGISTRY_CONSUL_ADDR=consul:8500
-    networks:
-      - genocs
-    # network_mode: host
-    ports:
-      - 9998:9998
-      - 9999:9999
-
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -39,7 +16,7 @@ services:
     image: influxdb
     container_name: influxdb
     ports:
-      - "8086:8086"
+      - 8086:8086
     networks:
       - genocs
     # network_mode: host
@@ -65,7 +42,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     ports:
-      - "9090:9090"
+      - 9090:9090
     networks:
       - genocs
     # network_mode: host
@@ -86,30 +63,12 @@ services:
     volumes:
       - seq:/data
 
-  vault:
-    image: vault
-    container_name: vault
-    ports:
-      - 8200:8200
-    networks:
-      - genocs
-    # network_mode: host
-    environment:
-      - VAULT_ADDR=http://127.0.0.1:8200
-      - VAULT_DEV_ROOT_TOKEN_ID=secret
-    cap_add:
-      - IPC_LOCK
-
 networks:
   genocs:
     name: genocs-network
     external: true
 
 volumes:
-  consul:
-    driver: local
-  esdata:
-    driver: local
   grafana:
     driver: local
   influxdb:

@@ -1,8 +1,8 @@
-version: "3.8"
+version: '3.9'
 
 services:
-  neo4j:
-    image: genocs/rabbitproducer:1.1
+  rabbitproducer:
+    image: genocs/rabbitproducer:1.0
     hostname: rabbitproducer
     container_name: rabbitproducer
     ports:
@@ -14,6 +14,29 @@ services:
       - RABBITMQ_USER_NAME=guest
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_BATCH_SIZE=50
+
+  rabbitconsumer:
+    image: genocs/rabbitconsumer:1.0
+    hostname: rabbitconsumer
+    container_name: rabbitconsumer
+    ports:
+      - 6002:80
+    networks:
+      - genocs
+    environment:
+      - RABBITMQ_HOST_NAME=rabbitmq
+      - RABBITMQ_USER_NAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_BATCH_SIZE=50      
+
+  testmetrics:
+    image: genocs/testmetrics
+    hostname: testmetrics
+    container_name: testmetrics
+    ports:
+      - 6003:80
+    networks:
+      - genocs
 
 networks:
   genocs:

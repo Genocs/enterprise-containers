@@ -9,7 +9,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /tea
+          - path: /producer
             pathType: ImplementationSpecific
             backend:
               service:

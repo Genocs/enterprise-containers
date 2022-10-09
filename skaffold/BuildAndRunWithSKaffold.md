@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- A Kubernetes cluster such as microk8s .
+- A Kubernetes cluster such as microk8s
 - Download [skaffold](https://github.com/GoogleContainerTools/skaffold/releases) cli
 - helm
 - kubectl

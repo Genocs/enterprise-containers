@@ -1,6 +1,4 @@
-﻿using Genocs.KubernetesCourse.WebApi.Services;
-using Genocs.KubernetesCourse.WebApi.Services.Interfaces;
-using Microsoft.ApplicationInsights.DependencyCollector;
+﻿using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 using Serilog;
@@ -30,10 +28,6 @@ builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((mo
 
 builder.Services.AddControllers();
 
-// Add services to the container.
-//builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<InternalApiClient>();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -43,16 +37,6 @@ builder.Services.Configure<HealthCheckPublisherOptions>(options =>
     options.Delay = TimeSpan.FromSeconds(2);
     options.Predicate = check => check.Tags.Contains("ready");
 });
-
-builder.Services.AddTransient<ITechTalksEventPublisher, TechTalksEventPublisher>();
-
-
-builder.WebHost.UseSentry(options =>
-{
-    options.Dsn = "https://05b9449ee8ff4c23a8a0b38d351b3633@o1049645.ingest.sentry.io/6030891";
-    options.TracesSampleRate = 1.0;
-});
-
 
 var app = builder.Build();
 
@@ -69,7 +53,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSentryTracing();
 
 app.UseHttpMetrics();
 

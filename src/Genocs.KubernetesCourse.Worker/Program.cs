@@ -1,17 +1,14 @@
-﻿using Prometheus;
-using System;
-using System.IO;
+﻿using Genocs.KubernetesCourse.Worker.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Genocs.KubernetesCourse.Worker.Messaging;
+using Prometheus;
+using System;
 
 namespace Genocs.KubernetesCourse.Worker;
 
 class Program
 {
     static IConfiguration Configuration;
-
-    private static readonly Counter TickTock = Metrics.CreateCounter("sampleapp_ticks_total", "Just keeps on ticking");
 
     static void Main(string[] args)
     {
@@ -33,10 +30,10 @@ class Program
     {
         string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile($"appsettings.{environment}.json", optional: true)
-            .AddEnvironmentVariables();
+        var builder = new ConfigurationBuilder();
+        //    .SetBasePath(Directory.GetCurrentDirectory())
+        //    .AddJsonFile($"appsettings.{environment}.json", optional: true)
+        //    .AddEnvironmentVariables();
 
         Configuration = builder.Build();
 
