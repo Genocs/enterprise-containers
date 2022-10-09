@@ -1,7 +1,7 @@
 Write-Host "Starting deletion of application and services" -ForegroundColor Yellow
 
 # source common variables
-. .\var.ps1
+. .\vars.ps1
 
 Write-Host "Deleting application consumer " -ForegroundColor Yellow
 Set-Location $applicationConsumerRootDirectory

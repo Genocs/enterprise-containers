@@ -1,8 +1,8 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "rg-genocs-akst",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
-    [string]$agicResourceGroupName = "rg-genocs-agic",
+    [string]$agicResourceGroupName = "rg-agic-genocs",
     [parameter(Mandatory = $false)]
     [string]$resourceGroupLocation = "West Europe",
     [parameter(Mandatory = $false)]
@@ -10,7 +10,7 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$acrRegistryName = "acr-genocs",
     [parameter(Mandatory = $false)]
-    [string]$agicPublicIpName = "utu-agic-pip-dev",
+    [string]$agicPublicIpName = "agic-pip",
     [parameter(Mandatory = $false)]
     [string]$agicName = "agic-genocs"    
 )
@@ -51,15 +51,15 @@ az network public-ip create `
     -n $agicPublicIpName `
     --allocation-method Static `
     --sku Standard `
-    --dns-name "utuaksapi"
+    --dns-name "genocs-aks-api"
 
 
 # 3. Create VNET
 az network vnet create `
     -g $agicResourceGroupName `
-    -n "utu-agic-vnet-dev" `
+    -n "agic-vnet" `
     --address-prefix 192.168.0.0/24 `
-    --subnet-name "utu-agic-subnet-dev" `
+    --subnet-name "agic-subnet" `
     --subnet-prefix 192.168.0.0/24
 
 
@@ -70,8 +70,8 @@ az network application-gateway create `
     -l $resourceGroupLocation `
     --sku Standard_v2 `
     --public-ip-address $agicPublicIpName `
-    --vnet-name "utu-agic-vnet-dev" `
-    --subnet "utu-agic-subnet-dev"
+    --vnet-name "agic-vnet" `
+    --subnet "agic-subnet"
 
 
 # Enable the Application Gateway Add-on to the AKS cluster
@@ -86,10 +86,10 @@ aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].nam
 
 aksVnetId=$(az network vnet show -g $nodeResourceGroup -n $aksVnetName -o tsv --query "id")
 
-appGWVnetId=$(az network vnet show -g $agicResourceGroupName -n 'utu-agic-vnet-dev'  -o tsv --query "id")
+appGWVnetId=$(az network vnet show -g $agicResourceGroupName -n "agic-vnet"  -o tsv --query "id")
 
 # Create the Peering
-az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name 'utu-agic-vnet-dev' --remote-vnet $aksVnetId --allow-vnet-access
+az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name "agic-vnet" --remote-vnet $aksVnetId --allow-vnet-access
 
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
 

@@ -1,6 +1,6 @@
-# Demo setup Monitoring and Observability for Kuberentes
+# Demo setup Monitoring and Observability for Kubernetes
 
-Setup for Improve Monitoring and Observability for Kuberentes with OSS tools
+Setup for Improve Monitoring and Observability for Kubernetes with OSS tools
 
 ## Initialize AKS cluster with all KEDA related resources
 

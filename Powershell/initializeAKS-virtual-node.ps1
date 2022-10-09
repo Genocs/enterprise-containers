@@ -2,21 +2,17 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$subscriptionName = "Pagamento in base al consumo",
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "RG-Genocs-aks",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
     [string]$resourceGroupLocation = "West Europe",
     [parameter(Mandatory = $false)]
-    [string]$clusterName = "aksgenocs",
+    [string]$clusterName = "aks-genocs",
     [parameter(Mandatory = $false)]
     [int16]$workerNodeCount = 1,
     [parameter(Mandatory = $false)]
-    [string]$kubernetesVersion = "1.22.6",
+    [string]$kubernetesVersion = "1.23.5",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "genocs",
-    [parameter(Mandatory = $false)]
-    [string]$acrRegistryResourceGroup = "acrResourceGroup"
-
-
+    [string]$acrRegistryName = "acr-genocs"
 )
 
 # Set Azure subscription name
@@ -149,8 +145,8 @@ kubectl create clusterrolebinding kubernetes-dashboard `
 
 ./create-image-pull-secret.ps1 `
     -acrRegistryName $acrRegistryName `
-    -acrRegistryResourceGroup $acrRegistryResourceGroup `
-    -ServicePrincipalID $appId `
-    -SpPassword $password
+    -resourceGroupName $resourceGroupName `
+    -servicePrincipalID $appId `
+    -servicePrincipalPassword $password
 
 Set-Location .\..\..\Powershell

@@ -36,7 +36,7 @@ az login
 
 
 # Login to azure container registry
-az acr login --name "uturegistry"
+az acr login --name "acr-genocs"
 
 
 # Setup credentials (DEV/QA/TEST)
@@ -44,24 +44,24 @@ az account set --subscription "302929bf-b0ca-4518-9e93-936b536d692b"
 
 
 # Create the resource group
-az group create --name "rg-utu-aks-dev" --location "eastus"
+az group create --name "rg-aks-genocs" --location "eastus"
 
 
 # Create the kubernates cluster with binding to azure container registry
-az aks create --resource-group "rg-utu-aks-dev" --name "utu-aks-dev" --node-count 2 --enable-addons monitoring --generate-ssh-keys --attach-acr "uturegistry" --location "eastus"
+az aks create --resource-group "rg-aks-genocs" --name "aks-genocs" --node-count 2 --enable-addons monitoring --generate-ssh-keys --attach-acr "acr-genocs" --location "eastus"
 
 
 # Get AKS credentials (needed to connect to AKS)
-az aks get-credentials --resource-group "rg-utu-aks-dev" --name "utu-aks-dev"
+az aks get-credentials --resource-group "rg-aks-genocs" --name "aks-genocs"
 
 
 # Attach existing AKS to ACR
 # (not needed if U create the kubernetes cluster as reported above)
-az aks update -n "utu-aks-dev" -g "rg-utu-aks-dev" --attach-acr "uturegistry"
+az aks update -g "rg-aks-genocs" -n "aks-genocs" --attach-acr "acr-genocs"
 
 
 # List the resources
-az acr list --resource-group "rg-utu-aks-dev" --query "[].{acrLoginServer:loginServer}" --output table
+az acr list --resource-group "rg-aks-genocs" --query "[].{acrLoginServer:loginServer}" --output table
 ```
 
 ## How to setup the Networking
@@ -75,38 +75,38 @@ Following commands allow to create:
 
 ``` ps
 # Create the resource group for AGIC (NETWORK)
-az group create -n "rg-utu-agic-dev" -l "eastus"
+az group create -n "rg-agic" -l "eastus"
 
 
 # Create the public IP 
-az network public-ip create -n "utu-agic-pip-dev" -g "rg-utu-agic-dev" --allocation-method Static --sku Standard --dns-name "utuaksapi"
+az network public-ip create -n "agic-pip" -g "rg-agic" --allocation-method Static --sku Standard --dns-name "aksapi"
 
-az network public-ip show -n "utu-agic-pip-dev" -g "rg-utu-agic-dev" --query ipAddress --output tsv
+az network public-ip show -n "agic-pip" -g "rg-agic" --query ipAddress --output tsv
 
 
 # Create VNET
-az network vnet create -n "utu-agic-vnet-dev" -g "rg-utu-agic-dev" --address-prefix 192.168.0.0/24 --subnet-name "utu-agic-subnet-dev" --subnet-prefix 192.168.0.0/24
+az network vnet create -n "agic-vnet" -g "rg-agic" --address-prefix 192.168.0.0/24 --subnet-name "agic-subnet" --subnet-prefix 192.168.0.0/24
 
 
 # Create AGIC (Application Gatway Ingress Controller)
-az network application-gateway create -n "utu-agic-dev" -g "rg-utu-agic-dev" -l "eastus" --sku Standard_v2 --public-ip-address "utu-agic-pip-dev" --vnet-name "utu-agic-vnet-dev" --subnet "utu-agic-subnet-dev"
+az network application-gateway create -n "agic" -g "rg-agic" -l "eastus" --sku Standard_v2 --public-ip-address "agic-pip" --vnet-name "agic-vnet" --subnet "agic-subnet"
 
 
 # Enable the Application Gateway Add-on to the AKS cluster
-appgwId=$(az network application-gateway show -n "utu-agic-dev" -g "rg-utu-agic-dev" -o tsv --query "id")
-az aks enable-addons -n "utu-aks-dev" -g "rg-utu-aks-dev" -a ingress-appgw --appgw-id $appgwId
+appgwId=$(az network application-gateway show -n "agic" -g "rg-agic" -o tsv --query "id")
+az aks enable-addons -n "aks" -g "rg-aks" -a ingress-appgw --appgw-id $appgwId
 
 # Read variable needed to setup the vnet peering
-nodeResourceGroup=$(az aks show -n "utu-aks-dev" -g "rg-utu-aks-dev" -o tsv --query "nodeResourceGroup")
+nodeResourceGroup=$(az aks show -n "aks" -g "rg-aks" -o tsv --query "nodeResourceGroup")
 
 aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name")
 
 aksVnetId=$(az network vnet show -n $aksVnetName -g $nodeResourceGroup -o tsv --query "id")
 
-appGWVnetId=$(az network vnet show -n "utu-agic-vnet-dev" -g "rg-utu-agic-dev" -o tsv --query "id")
+appGWVnetId=$(az network vnet show -n "agic-vnet" -g "rg-agic" -o tsv --query "id")
 
 # Create the Peering
-az network vnet peering create -n AppGWtoAKSVnetPeering -g "rg-utu-agic-dev" --vnet-name "utu-agic-vnet-dev" --remote-vnet $aksVnetId --allow-vnet-access
+az network vnet peering create -n AppGWtoAKSVnetPeering -g "rg-agic" --vnet-name "agic-vnet" --remote-vnet $aksVnetId --allow-vnet-access
 
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
 ```
@@ -131,13 +131,12 @@ az extension update --name aks-preview
 To Secure the configuration on Azure Key Vault create a User Managed Identity
 
 ``` ps
-
-az aks update -g "rg-utu-aks-dev" -n "utu-aks-dev" --enable-pod-identity-with-kubenet
+az aks update -g "rg-aks" -n "aks" --enable-pod-identity-with-kubenet
 
 
 ** TODO WORK IN PROGRESS **
-az aks pod-identity add --resource-group "rg-utu-aks-dev" \
---cluster-name "utu-aks-dev" --namespace default \
+az aks pod-identity add --resource-group "rg-aks" \
+--cluster-name "pod-identity-aks" --namespace default \
 --name csi-to-key-vault \
 --identity-resource-id "/subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/rg-utu-aks-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault"
 ```
@@ -174,8 +173,8 @@ minikube --help
 Day by day usefull command
 
 ``` bash
-# How to create a namespace
-kubectl create namespace utu
+# Create a namespace
+kubectl create namespace genocs
 
 # Get info
 kubectl get deployments

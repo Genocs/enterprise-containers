@@ -7,15 +7,15 @@ helm repo update
 Write-Host "Starting deployment of RabbitMQ on AKS cluster using Helm" -ForegroundColor Yellow
 
 helm upgrade --install rabbitmq `
+    bitnami/rabbitmq `
     --version 10.1.9 `
     --set auth.username=user `
     --set auth.password=PASSWORD `
     --set auth.erlangCookie=c2VjcmV0Y29va2ll `
-    --set metrics.enabled=true `
-    bitnami/rabbitmq
+    --set metrics.enabled=true
+    
 # azure-marketplace/rabbitmq
     
-helm upgrade --install rabbitmq --version 10.1.9 --set auth.username=user --set auth.password=PASSWORD --set auth.erlangCookie=c2VjcmV0Y29va2ll --set metrics.enabled=true bitnami/rabbitmq
 
 Write-Host "Deployment of RabbitMQ using Helm completed successfully" -ForegroundColor Yellow
 

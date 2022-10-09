@@ -1,10 +1,10 @@
 # source common variables
-. .\var.ps1
+. .\vars.ps1
 
-Write-Host "Starting deletion of ScaledObject and related resources from Kuberentes cluster" -ForegroundColor Yellow
+Write-Host "Starting deletion of ScaledObject and related resources from Kubernetes cluster" -ForegroundColor Yellow
 
-Write-Host "Deleting Tech Talks Consumer Autoscalar" -ForegroundColor Yellow
-Set-Location $autoScalarRootDirectory
+Write-Host "Deleting Tech Talks Consumer Autoscaler" -ForegroundColor Yellow
+Set-Location $autoScalerRootDirectory
 kubectl delete --recursive --filename .
 
 Write-Host "ScaledObject and related resources deleted successfully" -ForegroundColor Cyan

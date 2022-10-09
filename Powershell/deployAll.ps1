@@ -19,5 +19,5 @@ Write-Host "Installing KEDA on AKS cluster" -ForegroundColor Cyan
 Write-Host "Installing Application on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployApplications-AKS.ps1")
 
-Write-Host "Installing Autoscalar on AKS cluster" -ForegroundColor Cyan
+Write-Host "Installing Autoscaler on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployAutoScaler.ps1")

@@ -1,31 +1,31 @@
 Param(
     [parameter(Mandatory = $false)]
-    [bool]$ProvisionAKSCluster = $false
+    [bool]$provisionAKSCluster = $false
 )
 
 
-if ($ProvisionAKSCluster) {
+if ($provisionAKSCluster) {
     Write-Host "Provisioning AKS cluster with default parameters" -ForegroundColor Cyan
     & ((Split-Path $MyInvocation.InvocationName) + "\initializeAKS.ps1")
 }
 
 # source common variables
-. .\var.ps1
+. .\vars.ps1
 
 Write-Host "Starting deployment of application and services" -ForegroundColor Yellow
 
-Write-Host "Deploying Tech Talks Consumer" -ForegroundColor Yellow
+Write-Host "Deploying Consumer" -ForegroundColor Yellow
 Set-Location $applicationConsumerRootDirectory
 kubectl apply --filename deployment.yml
 
-Write-Host "Tech talks Consumer service deployed successfully" -ForegroundColor Cyan
+Write-Host "Consumer Worker deployed successfully" -ForegroundColor Cyan
 
-Write-Host "Deploying Tech Talks Producer" -ForegroundColor Yellow
+Write-Host "Deploying Producer" -ForegroundColor Yellow
 Set-Location $applicationProducerRootDirectory
 kubectl apply --recursive --filename .
 
-Write-Host "Tech talks Producer deployed successfully" -ForegroundColor Cyan
+Write-Host "Producer WebApi deployed successfully" -ForegroundColor Cyan
 
-Write-Host "All the services related to Tech Talks application have been successfully deployed" -ForegroundColor Cyan
+Write-Host "All the services related to the application have been successfully deployed" -ForegroundColor Cyan
 
 Set-Location .\..\..\Powershell

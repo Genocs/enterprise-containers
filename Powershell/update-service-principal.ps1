@@ -1,8 +1,8 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "demo-aks-vnodeRG",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
-    [string]$clusterName = "aksVNodeCluster"
+    [string]$clusterName = "aks-genocs"
 )
 
 $SP_ID = (az aks show `
@@ -25,4 +25,4 @@ az aks update-credentials `
     --service-principal $SP_ID `
     --client-secret "$SP_SECRET"
 
-./create-image-pull-secret.ps1 -ServicePrincipalID $SP_ID -SpPassword $SP_SECRET
+./create-image-pull-secret.ps1 -servicePrincipalID $SP_ID -servicePrincipalPassword $SP_SECRET

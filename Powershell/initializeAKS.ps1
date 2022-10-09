@@ -2,11 +2,11 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$subscriptionName = "Pagamento in base al consumo",
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "RG-Genocs-akst",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
     [string]$resourceGroupLocation = "West Europe",
     [parameter(Mandatory = $false)]
-    [string]$clusterName = "aksgenocs",
+    [string]$clusterName = "aks-genocs",
     [parameter(Mandatory = $false)]
     [int16]$workerNodeCount = 1,
     [parameter(Mandatory = $false)]
@@ -14,7 +14,7 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$kubernetesVMSize = "Standard_DS2_v2",    
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "genocsakst"
+    [string]$acrRegistryName = "acr-genocs"
 )
 
 # Set Azure subscription name
@@ -60,7 +60,7 @@ if ($aksCounts -eq 0) {
     # Enable pod Identity as standalone command
     # az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity
 
-    # Attach existing AKS to ACR
+    # Attach Azure Container Registry to the Kubernetes cluster
     # az aks update -g $resourceGroupName -n $clusterName --attach-acr $acrRegistryName
 
     #check the status of last command
@@ -70,8 +70,7 @@ if ($aksCounts -eq 0) {
 }
 
 
-# Get AKS credentials for newly created cluster
-# needed to connect to AKS
+# Get AKS credentials, needed to connect to AKS
 Write-Host "Getting credentials for cluster $clusterName" -ForegroundColor Yellow
 az aks get-credentials `
     --resource-group=$resourceGroupName `

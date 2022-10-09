@@ -10,5 +10,5 @@ Write-Host "Installing RabbitMQ on cluster" -ForegroundColor Cyan
 Write-Host "Installing Applications on cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployApplications-AKS-virtual-node.ps1")
 
-Write-Host "Installing Autoscalar on cluster" -ForegroundColor Cyan
+Write-Host "Installing Autoscaler on cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployAutoScaler.ps1")

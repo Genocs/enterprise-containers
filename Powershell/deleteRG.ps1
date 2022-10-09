@@ -1,6 +1,6 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "demo-ossconf"
+    [string]$resourceGroupName = "rg-aks-genocs"
 )
 
 # Delete resource group
