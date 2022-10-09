@@ -1,6 +1,9 @@
 # Setup Enterprice Kubernetes Cluster
 
-Setup Kubernetes production ready isn't a simple and straightforward task.
+![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
+
+Setup Kubernetes cluster to be production ready isn't a simple and straightforward task. It requires to take in consideration many topics.
+
 
 In this walkthrough I'm going to implement the steps required to setup the cluster. This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
 
@@ -13,26 +16,6 @@ In this walkthrough I'm going to implement the steps required to setup the clust
 - **Helm**
 - **DockerHub account** (optional)
 
-## Steps
-1. Install Azure Container Registry
-2. Provisioning Kubernetes Cluster
-3. Install Azure Key Vault
-4. Install Network Infrastructure
-5. Setup Azure Key Vault Secret
-6. Deploy RabbitMQ cluster inside the AKS
-7. Deploy Keda Autoscaler
-8. Deploy Application
-8. Deploy Application Scaler
-
-=======
-# Enterprise level Kubernetes setup
-
-![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
-
-Setup a Kubernetes solution at enterprise level require to take in consideration many topics.
-
- This repository contains useful tools and procedures to setup your Kubernetes cluster.
-
 ## Introduction
 
 The setup process can be spitted into different steps:
@@ -42,24 +25,27 @@ The setup process can be spitted into different steps:
 - Scaling
 - Monitoring
 
-### Setup (plus Securing and Scaling)
+
+## Setup - Overview
 
 During this step we are going to setup Kubernetes cluster tackling the following components:
 
-- Setup the cluster
-- Secure secrets hiding sensitive data
 - Setup private images repository
+- Setup the cluster
+- Setup the secrets vault
+- Setup network infrastructure 
+- Secure secrets hiding sensitive data
 - Setup autoscaler
 
 ### Monitoring
 
-The monitoring will be implemented with the components shown below. The implementation will monitor both infrastructure and application side:
+The monitoring will be implemented using open source components. The implementation will monitor both infrastructure and application side:
 
 - [Grafana](https://grafana.com/)
 - [Jaeger](https://www.jaegertracing.io/)
 - [Promotheus](https://prometheus.io/)
 
-Most of these tools are open source. The entreprise version require an active subscription or to pay a fee.  
+The entreprise version require an active subscription or to pay a fee.  
 
 ### Security and Networking
 
@@ -67,8 +53,9 @@ Security and Networking context will implement all the components that allows to
 
 The main components are:
 
-- Api Gateway
-- Ingress Controller
+- Public IP
+- Vnet with Subnet
+- Api Gateway Ingress Controller
 
 There are various products out of the box that can be used to implement the solution. All of them have PROS and CONS.
 
@@ -85,7 +72,6 @@ Authentication and authorization are implemented using `OAuth2`. `Kong` provides
 - [OAuth2](https://oauth.net/2/)
 - [OpenId](https://openid.net/connect/)
 
-
 ## KEDA - Kubernetes-based Event Driven Autoscaling
 
 There are multiple options for scaling Kubernetes and containers in general.
@@ -94,62 +80,50 @@ Here `(KEDA) Kubernetes-based Event Driven Autoscaling` will be used.
 
 RabbitMQ is used as the event source.
 
-## Prerequisites
-
-- Azure Susbscription
-- kubectl logged into kubernetes cluster
-- Powershell
-- Postman
-- Helm
-- DockerHub account (optional)
-
 
 If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1` of provisioning the cluster and [install KEDA](https://github.com/kedacore/keda#setup) on your own Kubernetes cluster.
 
 Similarly, if you do not wish to execute the PowerShell scripts, you can execute the commands which are part of those scripts manually.
 
-
 ### Event Driven Autoscaling
 
 There are multiple options for scaling with Kubernetes and containers in general. This demo uses `Kubernetes-based Event Driven Autoscaling (KEDA)`. RabbitMQ is used as an event source.
 
-## 1 - Code organization
+## Code organization
 
-## [docker-compose](docker-compose)
+### [docker-compose](docker-compose)
 
 Contains the docker compose files to install on docker a bunch of enterprise level tools.
 
 Please refere to this [README](/docker-compose/README.md) for details.
 
-## [docs](docs)
+### [docs](docs)
 
 Contains the explanation files.
 
 Contains the source code for an hypothetical application.
 
 `Genocs.KubernetesCourse.WebApi` contains the code generating the events / messages which are published to a RabbitMQ queue.
-=======
+
 - [aks-preview](aks-preview.md)
 - [azure-developer-community](azure-developer-community.md)
 - [minikube-wsl2](minikube-wsl2.md)
 - [monitoring-and-observability](monitoring-and-observability.md)
 
-## [src](src)
+### [src](src)
 
 Contains the source code for a model class used by two services:
 
-- The **Producers**: an API Service that send messages to RabbitMQ cluster
-- The **Consumers**: a Worker Application listening on RabbitMQ for processing messages.
+- The **Producers**: a WebApi that send messages to RabbitMQ cluster
+- The **Consumers**: a Worker listening RabbitMQ messages.
 
 `Genocs.KubernetesCourse.WebApi` contains the code for generating the messages which are published to a RabbitMQ queue.
 
-
 `Genocs.KubernetesCourse.Worker` contains the consumer code processing RabbitMQ messages.
-
 
 Both the Producer and Consumer uses the common data model. In order to build these you could use Dockerfile. We define the [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile) and [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile). These are built [docker-compose-build](/src/docker-compose-build.yml) file.
 
-**NOTE:**
+**NOTE**
 
 The RabbitMQ cluster is installed inside the same kubernetes cluster.
 
@@ -176,7 +150,7 @@ Once the images are built successfully, we can push them to the DockerHub regist
 Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Default }
 ```
 
-## [Powershell](Powersehll)
+### [Powershell](Powersehll)
 
 Contains the helper PowerShell scripts to:
 
@@ -186,17 +160,17 @@ Contains the helper PowerShell scripts to:
 - To delete the application
 - To delete the resource group (**AKS is expensive to keep alive**)
 
-## [k8s](k8s)
+### [k8s](k8s)
 
 Contains Kubernetes manifest files for deploying the Producer, Consumer and the Autoscaler components to the Kubernetes cluster.
 
-## [helm](helm)
+### [helm](helm)
 
 Contains the Helm RBAC enabling yaml file which add the Cluster Role Binding for RBAC enabled Kubernetes cluster.
 
 This was required before Helm 3.0 for the Tiller service. With helm 3.0, Tiller is no longer required.
 
-## [terraform](terraform)
+### [terraform](terraform)
 
 Contains the terraform Kubernetes cluster setup. The setup is primary meant to be used on Azure. Anyway, deploy on other cloud Provider is quite straightforward.
 
@@ -206,9 +180,19 @@ The Skaffold and Kaniko Kubernetes cluster setup.
 
 This allows to setup Kubernetes cluster on Google Cloud.
 
----
 
-## 2 - Setup
+# Setup - Details
+
+## Steps
+1. Install Azure Container Registry
+2. Install Kubernetes Cluster
+3. Install Azure Key Vault
+4. Setup Network Infrastructure
+5. Deploy Azure Key Vault Secret
+6. Deploy RabbitMQ node inside the AKS
+7. Deploy Keda Autoscaler
+8. Deploy Application
+9. Deploy Application AutoScaler
 
 ### 2.1 Initialize ACR
 
@@ -219,6 +203,7 @@ Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with defaul
 ``` PS
 .\Powershell\initializeACR.ps1
 ```
+
 ### 2.2 Initialize AKS cluster
 
 Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with default values from root directory
@@ -226,6 +211,7 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 ``` PS
 .\Powershell\initializeAKS.ps1
 ```
+
 ### 2.3 Initialize AKV
 
 The **AKV** Azure Key Vault is used to store every secret used by the application, as connection string, API Key and so on, in a safe place.
@@ -236,7 +222,7 @@ Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with defaul
 .\Powershell\initializeAKV.ps1
 ```
 
-### 2.3 Initialize Network Infrastrutture
+### 2.4 Setup Network Infrastrutture
 
 The **AKS** will use a network infrastructure composed by:
 - Public IP
@@ -251,7 +237,7 @@ Run [initializeNetwork](/Powershell/initializeNetwork.ps1) powershell script wit
 .\Powershell\initializeNetwork.ps1
 ```
 
-### 2.4 Deploy AKV Secret
+### 2.5 Deploy AKV Secret
 
 This step shows how to setup a script file to initialize some Secret inside AKV
 
@@ -259,9 +245,9 @@ This step shows how to setup a script file to initialize some Secret inside AKV
 .\Powershell\deployAKV-secrets.ps1
 ```
 
-### 2.5 Deploy RabbitMQ cluster
+### 2.6 Deploy RabbitMQ node
 
-This step shows how to setup a RabbitMQ cluster inside AKS.
+This step shows how to setup a RabbitMQ node inside AKS.
 
 ***Please do not use it for Production***.
 
@@ -269,7 +255,7 @@ This step shows how to setup a RabbitMQ cluster inside AKS.
 .\Powershell\deployRabbitMQ.ps1
 ```
 
-### 2.6 Deploy KEDA Autoscaler
+### 2.7 Deploy KEDA Autoscaler
 
 This step shall install the KEDA autoscaler inside AKS.
 
@@ -283,7 +269,7 @@ Verify KEDA is installed correctly on the Kubernetes cluster.
 kubectl get all -n keda
 ```
 
-### 2.7 Deploy Demo Application
+### 2.8 Deploy Demo Application
 
 Deploy Producers & Consumers
 
@@ -301,7 +287,8 @@ Alternately, all the components can also be deployed directly using the `kubectl
 # Run the kubectl apply recursively on k8s directory
 kubectl apply -R -f .
 ```
-### 2.8 Deploy Autoscaler for Application consumer deployment
+
+### 2.9 Deploy Autoscaler for Application Autoscaler
 
 Execute the `deployAutoScaler.ps1` powershell script.
 
@@ -325,7 +312,7 @@ If you do not wish to run the individual PowerShell scripts, you can run one sin
 .\Powershell\deployAll.ps1
 ```
 
-### 2.9 Get list of all the services deployed in the cluster
+### 2.10 Get list of all the services deployed in the cluster
 
 We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the Application producer WebApi which will be used to generate the messages onto RabbitMQ queue.
 
@@ -343,7 +330,7 @@ Also note the public `LoadBalancer` IP for the Producer Service. In this case th
 
 This IP will be different when the services are redeployed on a different Kubernetes cluster.
 
-### 2.10 Watch for deployments
+### 2.11 Watch for deployments
 
 The rabbitmq `ScaledObject` will be deployed as part of the deployment. Watch out for the deployments to see the changes in the scaling as the number of messages increases
 
@@ -356,7 +343,7 @@ kubectl get deploy -w
 
 Initially there is 1 instance of rabbitmq-consumer and 2 replicas of the rabbitmq-producer (Producer) deployed in the cluster.
 
-### 2.11 Port forward for RabbitMQ management UI
+### 2.12 Port forward for RabbitMQ management UI
 
 We will use port forwarding approach to access the RabbitMQ management UI.
 
@@ -364,13 +351,13 @@ We will use port forwarding approach to access the RabbitMQ management UI.
 kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
-### 2.12 Browse RabbitMQ Management UI
+### 2.13 Browse RabbitMQ Management UI
 
 http://localhost:15672/
 
 Login to the management UI using credentials as `user` and `PASSWORD`. Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
 
-### 2.12 Generate load using `Postman`
+### 2.14 Generate load using `Postman`
 
 I am using [Postman](https://www.getpostman.com/) to submit a POST request to the API which generates 2000 messages onto a RabbitMQ queue named `hello`. You can use any other command line tool like CURL to submit a GET request.
 
@@ -386,7 +373,7 @@ After building the GET query, hit the blue `Send` button on the top right. If ev
 
 The Producer will produce 2000 messages on the queue named `hello`. The consumer is configured to process `10` messages in a batch. The Consumer take the message, deserialize it and send the ACK to the message broker.
 
-### 2.13 Auto-scaling in action
+### 2.15 Auto-scaling in action
 
 See the number of containers for consumer grow to adjust the messages and also the drop when messages are processed.
 
