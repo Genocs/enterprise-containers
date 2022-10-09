@@ -7,6 +7,9 @@ Write-Host "Provisioning AKS cluster with default parameters" -ForegroundColor C
 Write-Host "Provisioning Azure Key Vault" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\initializeAKV.ps1")
 
+Write-Host "Installing network infrastructure for AKS cluster" -ForegroundColor Cyan
+& ((Split-Path $MyInvocation.InvocationName) + "\initializeNetwork.ps1")
+
 Write-Host "Deploy the Azure Key Vault Secrets" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployAKV-secrets.ps1")
 
@@ -15,9 +18,6 @@ Write-Host "Installing RabbitMQ on AKS cluster" -ForegroundColor Cyan
 
 Write-Host "Installing KEDA on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployKEDA.ps1")
-
-Write-Host "Installing network infrastructure for AKS cluster" -ForegroundColor Cyan
-& ((Split-Path $MyInvocation.InvocationName) + "\initializeNetwork.ps1")
 
 Write-Host "Installing Application on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployApplications-AKS.ps1")

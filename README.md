@@ -1,31 +1,50 @@
-# KEDA - Kubernetes-based Event Driven Autoscaling
+# Setup Enterprice Kubernetes Cluster
 
-There are multiple options for scaling with Kubernetes and containers in general. This demo uses `Kubernetes-based Event Driven Autoscaling (KEDA)`. RabbitMQ is used as an event source.
+Setup Kubernetes production ready isn't a simple and straightforward task.
+
+In this walkthrough I'm going to implement the steps required to setup the cluster. This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
 
 ## Prerequisites
 
-- Azure Susbscription to create AKS cluster
-- kubectl logged into kubernetes cluster
-- Powershell
-- Postman
-- Helm
-- DockerHub account (optional)
+- **Azure Subscription** to create AKS cluster
+- **kubectl** logged into kubernetes cluster
+- **Powershell**
+- **Postman**
+- **Helm**
+- **DockerHub account** (optional)
+
+## Steps
+1. Install Azure Container Registry
+2. Provisioning Kubernetes Cluster
+3. Install Azure Key Vault
+4. Install Network Infrastructure
+5. Setup Azure Key Vault Secret
+6. Deploy RabbitMQ cluster inside the AKS
+7. Deploy Keda Autoscaler
+8. Deploy Application
+8. Deploy Application Scaler
+
 
 If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1` of provisioning the cluster and [install KEDA](https://github.com/kedacore/keda#setup) on your own kubernetes cluster.
 
 Similarly, if you do not wish to execute the Powershell scripts, you can execute the commands which are part of those scripts manually.
 
+
+### Event Driven Autoscaling
+
+There are multiple options for scaling with Kubernetes and containers in general. This demo uses `Kubernetes-based Event Driven Autoscaling (KEDA)`. RabbitMQ is used as an event source.
+
 ## 1 - Code organization
 
 - [src](src)
 
-Contains the source code for a model classes for a hypothetical Tech Talks management application.
+Contains the source code for an hypothetical application.
 
-`Genocs.KubernetesCourse.WebApi` contains the code for generating the events / messages which are published to a RabbitMQ queue.
+`Genocs.KubernetesCourse.WebApi` contains the code generating the events / messages which are published to a RabbitMQ queue.
 
-`Genocs.KubernetesCourse.Worker` contains the consumer code for processing RabbitMQ messages.
+`Genocs.KubernetesCourse.Worker` contains the consumer code processing RabbitMQ messages.
 
-Both the Producer and Consumer uses the common data model. In order to build these using Dockerfile, we define the [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile) and [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile). These are built [docker-compose-build](/src/docker-compose-build.yml) file.
+Both the Producer and Consumer uses the common data model. In order to build these you could use Dockerfile. We define the [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile) and [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile). These are built [docker-compose-build](/src/docker-compose-build.yml) file.
 
 The docker images can be built using the following command:
 
@@ -59,25 +78,68 @@ With helm 3.0, Tiller is no longer required.
 
 ## 2 - Demo setup
 
-### 2.1 Initialize AKS cluster with KEDA
+### 2.1 Initialize ACR
+
+The **ACR** (Azure Container Registry) allows to store Docker images inside a private repositoy 
+
+Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with default values from root directory
+
+``` PS
+.\Powershell\initializeACR.ps1
+```
+### 2.2 Initialize AKS cluster
 
 Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with default values from root directory
 
 ``` PS
 .\Powershell\initializeAKS.ps1
 ```
+### 2.3 Initialize AKV
 
-**Note:**
+The **AKV** Azure Key Vault is used to store every secret used by the application, as connection string, API Key and so on, in a safe place.
 
-The default options can be overwritten by passing arguments to the initializeAKS script. In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
+Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with default values from root directory
 
 ``` PS
-.\Powershell\initilaizeAKS `
-    -workerNodeCount 4 `
-    -resourceGroupName "kedaresgrp"
+.\Powershell\initializeAKV.ps1
 ```
 
-### 2.2 Deploy KEDA
+### 2.3 Initialize Network Infrastrutture
+
+The **AKS** will use a network infrastructure composed by:
+- Public IP
+- VNET
+- AGIC
+
+The Poweshell script will *'Create peering beetween AGIC and AKS and viceversa'* as well
+
+Run [initializeNetwork](/Powershell/initializeNetwork.ps1) powershell script with default values from root directory
+
+``` PS
+.\Powershell\initializeNetwork.ps1
+```
+
+### 2.4 Deploy AKV Secret
+
+This step shows how to setup a script file to initialize some Secret inside AKV
+
+``` PS
+.\Powershell\deployAKV-secrets.ps1
+```
+
+### 2.5 Deploy RabbitMQ cluster
+
+This step shows how to setup a RabbitMQ cluster inside AKS.
+
+***Please do not use it for Production***.
+
+``` PS
+.\Powershell\deployRabbitMQ.ps1
+```
+
+### 2.6 Deploy KEDA Autoscaler
+
+This step shall install the KEDA autoscaler inside AKS.
 
 ``` PS
 .\Powershell\deployKEDA.ps1
@@ -89,13 +151,9 @@ Verify KEDA is installed correctly on the Kubernetes cluster.
 kubectl get all -n keda
 ```
 
-### 2.3 Deploy RabbitMQ
+### 2.7 Deploy Demo Application
 
-``` PS
-.\Powershell\deployRabbitMQ.ps1
-```
-
-### 2.4 Deploy Producers & Consumers
+Deploy Producers & Consumers
 
 Execute the powershell script.
 
@@ -112,13 +170,22 @@ Run the kubectl apply recursively on k8s directory
 ``` bash
 kubectl apply -R -f .
 ```
-
-### 2.5 Deploy Auto scalar for RabbitMQ consumer deployment
+### 2.8 Deploy Autoscaler for Application consumer deployment
 
 Execute the `deployAutoScaler.ps1` powershell script.
 
 ``` PS
 .\Powershell\deployAutoScaler.ps1
+```
+
+**Note**
+
+The default options can be overwritten by passing arguments to the initializeAKS script. In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
+
+``` PS
+.\Powershell\initilaizeAKS `
+    -workerNodeCount 4 `
+    -resourceGroupName "kedaresgrp"
 ```
 
 If you do not wish to run the individual PowerShell scripts, you can run one single script which will deploy all the necessary things by running the above scripts in correct order.
@@ -127,9 +194,9 @@ If you do not wish to run the individual PowerShell scripts, you can run one sin
 .\Powershell\deployAll.ps1
 ```
 
-### 2.6 Get list of all the services deployed in the cluster
+### 2.9 Get list of all the services deployed in the cluster
 
-We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the TechTalks producer service which will be used to generate the messages onto RabbitmQ queue.
+We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the Application producer WebApi which will be used to generate the messages onto RabbitMQ queue.
 
 ``` bash
 kubectl get svc
@@ -144,7 +211,7 @@ Also note the public `LoadBalancer` IP for the techtalksapi service. In this cas
 **Note:** 
 This IP will be different when the services are redeployed on a different Kubernetes cluster.
 
-### 2.7 Watch for deployments
+### 2.10 Watch for deployments
 
 The rabbitmq `ScaledObject` will be deployed as part of the deployment. Watch out for the deployments to see the changes in the scaling as the number of messages increases
 
@@ -157,7 +224,7 @@ kubectl get deploy -w
 
 Initially there is 1 instance of rabbitmq-consumer and 2 replicas of the techtalksapi (producer) deployed in the cluster.
 
-### 2.8 Port forward for RabbitMQ management UI
+### 2.11 Port forward for RabbitMQ management UI
 
 We will use port forwarding approach to access the RabbitMQ management UI.
 
@@ -165,13 +232,13 @@ We will use port forwarding approach to access the RabbitMQ management UI.
 kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
-### 2.9 Browse RabbitMQ Management UI
+### 2.12 Browse RabbitMQ Management UI
 
 http://localhost:15672/
 
 Login to the management UI using credentials as `user` and `PASSWORD`. Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
 
-### 2.10 Generate load using `Postman`
+### 2.12 Generate load using `Postman`
 
 I am using [Postman](https://www.getpostman.com/) to submit a POST request to the API which generates 1000 messages onto a RabbitMQ queue named `hello`. You can use any other command line tool like CURL to submit a GET request.
 
@@ -187,7 +254,7 @@ After building the GET query, hit the blue `Send` button on the top right. If ev
 
 The Producer will produce 2000 messages on the queue named `hello`. The consumer is configured to process `10` messages in a batch. The consumer also simulates a long running process by sleeping for `2 seconds`.
 
-### 2.11 Auto-scaling in action
+### 2.13 Auto-scaling in action
 
 See the number of containers for consumer grow to adjust the messages and also the drop when messages are processed.
 
