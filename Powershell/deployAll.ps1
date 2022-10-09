@@ -16,8 +16,12 @@ Write-Host "Installing RabbitMQ on AKS cluster" -ForegroundColor Cyan
 Write-Host "Installing KEDA on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployKEDA.ps1")
 
+Write-Host "Installing network infrastructure for AKS cluster" -ForegroundColor Cyan
+& ((Split-Path $MyInvocation.InvocationName) + "\initializeNetwork.ps1")
+
 Write-Host "Installing Application on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployApplications-AKS.ps1")
 
 Write-Host "Installing Autoscaler on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployAutoScaler.ps1")
+

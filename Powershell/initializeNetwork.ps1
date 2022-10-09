@@ -17,15 +17,15 @@ Param(
 
 
 # Login to Azure
-az login
+#az login
 
 
 # Login to azure container registry
-az acr login --name $acrRegistryName
+#az acr login --name $acrRegistryName
 
 
 # List the resources
-az acr list --resource-group $resourceGroupName --query "[].{acrLoginServer:loginServer}" --output table
+#az acr list --resource-group $resourceGroupName --query "[].{acrLoginServer:loginServer}" --output table
 
 
 ## Setup the networking
@@ -51,7 +51,7 @@ az network public-ip create `
     -n $agicPublicIpName `
     --allocation-method Static `
     --sku Standard `
-    --dns-name "genocs-aks-api"
+    --dns-name "genocs-aks"
 
 
 # 3. Create VNET
@@ -78,7 +78,6 @@ az network application-gateway create `
 appgwId=$(az network application-gateway show -g $agicResourceGroupName -n $agicName  -o tsv --query "id")
 az aks enable-addons -g $resourceGroupName -n $clusterName  -a ingress-appgw --appgw-id $appgwId
 
-
 # Read variable needed to setup the vnet peering
 nodeResourceGroup=$(az aks show -g $resourceGroupName -n $clusterName  -o tsv --query "nodeResourceGroup")
 
@@ -96,14 +95,9 @@ az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup --
 
 ## Configuration and security
 # To Secure the configuration on Azure Key Vault create a User managed Identity
-az aks pod-identity add `
-    --resource-group $resourceGroupName `
-    --cluster-name $clusterName `
-    --namespace default `
-    --name csi-to-key-vault `
-    --identity-resource-id /subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/UTU-RG-RD/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault
-
-# Delete the AKS cluster
-#az aks delete --resource-group $resourceGroupName --name $clusterName --yes
-#az aks delete --resource-group $resourceGroupName --yes
-#az aks delete --resource-group $agicResourceGroupName --yes
+#az aks pod-identity add `
+#    --resource-group $resourceGroupName `
+#    --cluster-name $clusterName `
+#    --namespace default `
+#    --name csi-to-key-vault `
+#    --identity-resource-id /subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/UTU-RG-RD/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault

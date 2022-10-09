@@ -17,8 +17,8 @@ Param(
 Write-Host "Setting Azure subscription to $subscriptionName" -ForegroundColor Yellow
 az account set --subscription=$subscriptionName
 
-# $subscriptionId = (az account show | ConvertFrom-Json).id
-# $tenantId = (az account show | ConvertFrom-Json).tenantId
+$subscriptionId = (az account show | ConvertFrom-Json).id
+$tenantId = (az account show | ConvertFrom-Json).tenantId
 # Write-Host "Azure subscription '$subscriptionName' subscriptionId: $subscriptionId, tenantId: $tenantId" -ForegroundColor Yellow
 
 
@@ -71,7 +71,12 @@ $identity = az identity show `
     --resource-group $existingIdentity.resourceGroup | ConvertFrom-Json
 
 Write-Host "Principal ID: " + $identity.principalId
+Write-Host "SubscriptionId: " + $subscriptionId
 Write-Host "Client ID: " + $identity.clientId
+Write-Host "Azure Key Vault: " + $akvName
+Write-Host "TenantId: " + $tenantId
+
+Write-Host "Please update the SecretProviderClass.yml userAssignedIdentityID, keyvaultName, tenantId, accordingly" -ForegroundColor Green
 
 Write-Host "Setting policy to access secrets in Key Vault with Client Id"
 az keyvault set-policy `
