@@ -1,6 +1,6 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "ngAcrRegistry"
+    [string]$acrRegistryName = "acr-genocs"
 )
 
 $acrUserPassword = az acr credential show --name $acrRegistryName --query "passwords[0].value"

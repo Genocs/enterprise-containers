@@ -11,3 +11,5 @@ helm upgrade --install keda `
     --version 2.4.0 `
     --create-namespace `
     --namespace keda
+
+Write-Host "Deployment of KEDA using Helm completed successfully" -ForegroundColor Yellow

@@ -2,19 +2,20 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$subscriptionName = "Pagamento in base al consumo",
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "RG-Genocs-akst",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
     [string]$resourceGroupLocation = "West Europe",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "genocsakst"
+    [string]$acrRegistryName = "acr-genocs"
 )
-
-$subscriptionId = (az account show | ConvertFrom-Json).id
-$tenantId = (az account show | ConvertFrom-Json).tenantId
 
 # Set Azure subscription name
 Write-Host "Setting Azure subscription to $subscriptionName" -ForegroundColor Yellow
 az account set --subscription=$subscriptionName
+
+# $subscriptionId = (az account show | ConvertFrom-Json).id
+# $tenantId = (az account show | ConvertFrom-Json).tenantId
+# Write-Host "Azure subscription '$subscriptionName' subscriptionId: $subscriptionId, tenantId: $tenantId" -ForegroundColor Yellow
 
 # Create resource group if it doesn't exist
 $rgExists = az group exists --name $resourceGroupName
@@ -22,7 +23,7 @@ Write-Host "$resourceGroupName exists: $rgExists"
 
 if ($rgExists -eq $false) {
 
-    # Create resource group name
+    # Create resource group
     Write-Host "Creating resource group $resourceGroupName in region $resourceGroupLocation" -ForegroundColor Yellow
     az group create `
         --name=$resourceGroupName `

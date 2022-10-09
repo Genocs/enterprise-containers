@@ -3,26 +3,26 @@ Param(
     [string]$akvName = "kv-genocsakst"
 )
 
-Write-Host "Starting deployment of AKV secrets" -ForegroundColor Yellow
+Write-Host "Starting deployment of Azure Key Vault secrets" -ForegroundColor Yellow
 
-az keyvault secret `
-    set --vault-name $akvName `
+az keyvault secret set `
+    --vault-name $akvName `
     --name "RABBITMQ-HOST-NAME" `
     --value "rabbitmq"
 
-az keyvault secret `
-    set --vault-name $akvName `
+az keyvault secret set `
+    --vault-name $akvName `
     --name "RABBITMQ-USER-NAME" `
     --value "user"
 
-az keyvault secret `
-    set --vault-name $akvName `
+az keyvault secret set `
+    --vault-name $akvName `
     --name "RABBITMQ-PASSWORD" `
     --value "PASSWORD"
 
-az keyvault secret `
-    set --vault-name $akvName `
+az keyvault secret set `
+    --vault-name $akvName `
     --name "RABBITMQ-BATCH-SIZE" `
     --value "100"
 
-Write-Host "Deployment of AKV secrets completed successfully" -ForegroundColor Yellow
+Write-Host "Deployment of Azure Key Vault secrets completed successfully" -ForegroundColor Yellow

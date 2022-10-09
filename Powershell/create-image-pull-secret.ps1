@@ -1,26 +1,25 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "ngacrregistry",
+    [string]$acrRegistryName = "acr-genocs",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryResourceGroup = "acrResourceGroup",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [Parameter(Mandatory = $true)]
-    [string]$ServicePrincipalID,
+    [string]$servicePrincipalID,
     [Parameter(Mandatory = $true)]
-    [string]$SpPassword
+    [string]$servicePrincipalPassword
 )
 
 # Get login server name based on ACR registry name
-
 $serverName = az acr show `
     --name $acrRegistryName `
-    --resource-group $acrRegistryResourceGroup `
+    --resource-group $resourceGroupName `
     --query loginServer
 
 Write-Host "Creating docker secret" -ForegroundColor Yellow
 kubectl create secret docker-registry acr-image-secret `
     --docker-server=$serverName `
-    --docker-username=$ServicePrincipalID `
-    --docker-password=$SpPassword
+    --docker-username=$servicePrincipalID `
+    --docker-password=$servicePrincipalPassword
 
 # Verify secret was created
 kubectl get secret acr-image-secret --output=yaml

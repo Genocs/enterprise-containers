@@ -1,5 +1,5 @@
 # source common variables
-. .\var.ps1
+. .\vars.ps1
 
 Write-Host "Starting deployment of application and services" -ForegroundColor Yellow
 

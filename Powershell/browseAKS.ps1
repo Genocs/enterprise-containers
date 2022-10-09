@@ -1,8 +1,8 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "RG-Genocs-aks",
+    [string]$resourceGroupName = "rg-aks-genocs",
     [parameter(Mandatory = $false)]
-    [string]$clusterName = "aksgenocs"
+    [string]$clusterName = "aks-genocs"
 )
 
 # Browse AKS dashboard
