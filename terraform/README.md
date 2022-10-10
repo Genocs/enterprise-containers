@@ -77,7 +77,7 @@ variable "vm_disk_size" {
 variable "kubernetes_version" {
     type        = string
     description = "The kubernetes version" 
-    default     = "1.23.5"
+    default     = "1.24.6"
 }
 
 variable "ssh_public_key" {

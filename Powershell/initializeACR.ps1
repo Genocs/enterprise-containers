@@ -6,7 +6,7 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$resourceGroupLocation = "West Europe",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs"
+    [string]$acrRegistryName = "genocscontainer"
 )
 
 # Set Azure subscription name

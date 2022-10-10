@@ -8,7 +8,7 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$clusterName = "aks-genocs",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs",
+    [string]$acrRegistryName = "genocscontainer",
     [parameter(Mandatory = $false)]
     [string]$agicPublicIpName = "agic-pip",
     [parameter(Mandatory = $false)]

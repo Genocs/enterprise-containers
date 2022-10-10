@@ -10,9 +10,9 @@ Param(
     [parameter(Mandatory = $false)]
     [int16]$workerNodeCount = 1,
     [parameter(Mandatory = $false)]
-    [string]$kubernetesVersion = "1.23.5",
+    [string]$kubernetesVersion = "1.24.6",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs"
+    [string]$acrRegistryName = "genocscontainer"
 )
 
 # Set Azure subscription name

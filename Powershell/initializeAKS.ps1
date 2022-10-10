@@ -10,11 +10,11 @@ Param(
     [parameter(Mandatory = $false)]
     [int16]$workerNodeCount = 1,
     [parameter(Mandatory = $false)]
-    [string]$kubernetesVersion = "1.23.5",
+    [string]$kubernetesVersion = "1.24.6",
     [parameter(Mandatory = $false)]
     [string]$kubernetesVMSize = "Standard_DS2_v2",    
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs"
+    [string]$acrRegistryName = "genocscontainer"
 )
 
 # Set Azure subscription name
@@ -38,6 +38,14 @@ if ($rgExists -eq $false) {
 # Create Kubernetes Cluster if it doesn't exist
 $aksCounts = az aks list --query "length([?name == '$clusterName' && resourceGroup == '$resourceGroupName'].{Name: name})"
 
+# Check this link 
+# https://learn.microsoft.com/en-us/azure/aks/use-azure-ad-pod-identity
+# https://github.com/MicrosoftDocs/azure-docs/issues/42434 
+# az version
+# az extension add --name aks-preview
+# az extension update --name aks-preview
+# az feature register --name PodSecurityPolicyPreview --namespace Microsoft.ContainerService
+# az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/PodSecurityPolicyPreview')].{Name:name,State:properties.state}"
 if ($aksCounts -eq 0) {
     # Create AKS cluster
     Write-Host "Creating AKS cluster '$clusterName' with resource group $resourceGroupName in region $resourceGroupLocation" -ForegroundColor Yellow
@@ -51,7 +59,6 @@ if ($aksCounts -eq 0) {
         --enable-addons monitoring `
         --enable-managed-identity `
         --generate-ssh-keys `
-        --enable-pod-identity `
         --output=jsonc `
         --kubernetes-version=$kubernetesVersion `
         --attach-acr=$acrRegistryName 

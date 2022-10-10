@@ -1,6 +1,6 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs"
+    [string]$acrRegistryName = "genocscontainer"
 )
 
 Write-Host "Retrieving ACR username" -ForegroundColor Cyan

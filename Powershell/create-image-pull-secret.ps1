@@ -1,6 +1,6 @@
 Param(
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "acr-genocs",
+    [string]$acrRegistryName = "genocscontainer",
     [parameter(Mandatory = $false)]
     [string]$resourceGroupName = "rg-aks-genocs",
     [Parameter(Mandatory = $true)]

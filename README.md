@@ -1,11 +1,11 @@
-# Setup Enterprice Kubernetes Cluster
+# Enterprise Kubernetes Cluster Setup
 
 ![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
 
 Setup Kubernetes cluster to be production ready isn't a simple and straightforward task. It requires to take in consideration many topics.
 
 
-In this walkthrough I'm going to implement the steps required to setup the cluster. This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
+In this walkthrough will be implemented the steps required to setup the cluster. This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
 
 ## Prerequisites
 
@@ -24,6 +24,7 @@ The setup process can be spitted into different steps:
 - Security
 - Scaling
 - Monitoring
+- Application
 
 
 ## Setup - Overview
@@ -412,5 +413,3 @@ A lot of people inspired me and provided unevaluable amount of information:
 Here some of them:
 - [NileshGule](https://github.com/NileshGule/)
 - [DevMentors](https://github.com/devmentors/)
-
-I'm sure I miss some of them (I'll fill the missing info) sorry for this.
