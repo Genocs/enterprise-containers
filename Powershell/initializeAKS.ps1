@@ -48,7 +48,7 @@ $aksCounts = az aks list --query "length([?name == '$clusterName' && resourceGro
 # az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/PodSecurityPolicyPreview')].{Name:name,State:properties.state}"
 if ($aksCounts -eq 0) {
     # Create AKS cluster
-    Write-Host "Creating AKS cluster '$clusterName' with resource group $resourceGroupName in region $resourceGroupLocation" -ForegroundColor Yellow
+    Write-Host "Creating AKS cluster $clusterName with resource group $resourceGroupName in region $resourceGroupLocation" -ForegroundColor Yellow
     az aks create `
         --resource-group=$resourceGroupName `
         --name=$clusterName `

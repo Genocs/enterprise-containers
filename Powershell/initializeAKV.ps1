@@ -51,26 +51,25 @@ if ($akvCounts -eq 0) {
 }
 
 # Retrieve existing AKS
-Write-Host "Retrieving AKS details"
-$aks = (az aks show `
-    --name $clusterName `
-    --resource-group $aksResourceGroupName | ConvertFrom-Json)
+# Write-Host "Retrieving AKS details"
+# $aks = (az aks show `
+#     --name $clusterName `
+#     --resource-group $aksResourceGroupName | ConvertFrom-Json)
 
 # Retrieve the existing AKS Azure Identity
 Write-Host "Retrieving the existing Azure Identity..." -ForegroundColor Yellow
-$identityResource = 'mc_' + $aksResourceGroupName + '_' + $clusterName + '_' + $aks.location
-
-Write-Host "identityResource is: $identityResource" -ForegroundColor Yellow
+$nodeResourceGroup = $(az aks show -g $aksResourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
+Write-Host "nodeResourceGroup is: " $nodeResourceGroup -ForegroundColor Yellow
 
 $identity = az identity show `
     --name "$clusterName-agentpool" `
-    --resource-group $identityResource | ConvertFrom-Json
+    --resource-group $nodeResourceGroup | ConvertFrom-Json
 
-Write-Host "Principal ID: " + $identity.principalId
-Write-Host "SubscriptionId: " + $subscriptionId
-Write-Host "Client ID: " + $identity.clientId
-Write-Host "Azure Key Vault: " + $akvName
-Write-Host "TenantId: " + $tenantId
+Write-Host "Principal ID: " $identity.principalId
+Write-Host "SubscriptionId: " $subscriptionId
+Write-Host "Client ID: " $identity.clientId
+Write-Host "Azure Key Vault: " $akvName
+Write-Host "TenantId: " $tenantId
 
 Write-Host "Please update the SecretProviderClass.yml userAssignedIdentityID, keyvaultName, tenantId, accordingly" -ForegroundColor Green
 
