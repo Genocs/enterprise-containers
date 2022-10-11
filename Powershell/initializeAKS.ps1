@@ -55,12 +55,12 @@ if ($aksCounts -eq 0) {
         --location=$resourceGroupLocation `
         --node-count=$workerNodeCount `
         --node-vm-size=$kubernetesVMSize `
+        --kubernetes-version=$kubernetesVersion `
+        --generate-ssh-keys `
         --enable-addons azure-keyvault-secrets-provider `
         --enable-addons monitoring `
         --enable-managed-identity `
-        --generate-ssh-keys `
         --output=jsonc `
-        --kubernetes-version=$kubernetesVersion `
         --attach-acr=$acrRegistryName 
     # --aks-custom-headers="CustomizedUbuntu=aks-ubuntu-1804,ContainerRuntime=containerd" `
 

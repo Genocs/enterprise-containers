@@ -62,13 +62,9 @@ $identityResource = 'mc_' + $aksResourceGroupName + '_' + $clusterName + '_' + $
 
 Write-Host "identityResource is: $identityResource" -ForegroundColor Yellow
 
-$existingIdentity = (az resource list `
-    --resource-group $identityResource `
-    --query "[?contains(name, '$clusterName-agentpool')]" | ConvertFrom-Json)
-
 $identity = az identity show `
-    --name $existingIdentity.name `
-    --resource-group $existingIdentity.resourceGroup | ConvertFrom-Json
+    --name "$clusterName-agentpool" `
+    --resource-group $identityResource | ConvertFrom-Json
 
 Write-Host "Principal ID: " + $identity.principalId
 Write-Host "SubscriptionId: " + $subscriptionId
@@ -77,9 +73,6 @@ Write-Host "Azure Key Vault: " + $akvName
 Write-Host "TenantId: " + $tenantId
 
 Write-Host "Please update the SecretProviderClass.yml userAssignedIdentityID, keyvaultName, tenantId, accordingly" -ForegroundColor Green
-
-Write-Host "Please update the SecretProviderClass accordingly" -ForegroundColor Green
-
 
 Write-Host "Setting policy to access secrets in Key Vault with Client Id"
 az keyvault set-policy `

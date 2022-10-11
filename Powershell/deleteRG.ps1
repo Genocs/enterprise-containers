@@ -17,6 +17,11 @@ if ($rgExists -eq $true) {
     az group delete --name=$resourceGroupName --yes
 }
 
+az group delete --name="DefaultResourceGroup-WEU" --yes
+az group delete --name="NetworkWatcherRG" --yes
+
+
+
 # Delete the AKS cluster
 #az aks delete --resource-group $resourceGroupName --name $clusterName --yes
 #az aks delete --resource-group $resourceGroupName --yes

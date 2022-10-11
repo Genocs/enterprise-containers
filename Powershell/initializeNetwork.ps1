@@ -76,16 +76,16 @@ az network application-gateway create `
 
 # Enable the Application Gateway Add-on to the AKS cluster
 appgwId=$(az network application-gateway show -g $agicResourceGroupName -n $agicName  -o tsv --query "id")
-az aks enable-addons -g $resourceGroupName -n $clusterName  -a ingress-appgw --appgw-id $appgwId
+az aks enable-addons -g $resourceGroupName -n $clusterName -a ingress-appgw --appgw-id $appgwId
 
 # Read variable needed to setup the vnet peering
-nodeResourceGroup=$(az aks show -g $resourceGroupName -n $clusterName  -o tsv --query "nodeResourceGroup")
+nodeResourceGroup=$(az aks show -g $resourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
 
 aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name")
 
 aksVnetId=$(az network vnet show -g $nodeResourceGroup -n $aksVnetName -o tsv --query "id")
 
-appGWVnetId=$(az network vnet show -g $agicResourceGroupName -n "agic-vnet"  -o tsv --query "id")
+appGWVnetId=$(az network vnet show -g $agicResourceGroupName -n "agic-vnet" -o tsv --query "id")
 
 # Create the Peering
 az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name "agic-vnet" --remote-vnet $aksVnetId --allow-vnet-access
