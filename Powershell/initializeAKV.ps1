@@ -48,6 +48,8 @@ if ($akvCounts -eq 0) {
         --resource-group=$resourceGroupName `
         --location=$resourceGroupLocation `
         --output=jsonc
+
+    Write-Host "Successfully created Azure Key Vault $akvName under resource group $resourceGroupName" -ForegroundColor Green        
 }
 
 # Retrieve existing AKS

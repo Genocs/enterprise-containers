@@ -60,8 +60,9 @@ if ($aksCounts -eq 0) {
         --enable-addons azure-keyvault-secrets-provider `
         --enable-addons monitoring `
         --enable-managed-identity `
-        --output=jsonc `
-        --attach-acr=$acrRegistryName 
+        --attach-acr=$acrRegistryName `
+        --output=jsonc
+
     # --aks-custom-headers="CustomizedUbuntu=aks-ubuntu-1804,ContainerRuntime=containerd" `
 
     # Enable pod Identity as standalone command
