@@ -6,10 +6,11 @@ public class InternalApiClient
 {
     private readonly HttpClient _httpClient;
 
-    public InternalApiClient(HttpClient httpClient)
+    public InternalApiClient(HttpClient httpClient, IConfiguration config)
     {
+        var url = config.GetSection("ApiClients").GetSection("InternalApi").Value;
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _httpClient.BaseAddress = new Uri("https://localhost:52520/");
+        _httpClient.BaseAddress = new Uri(url);
     }
 
     public async Task<string?> GetInternalAsync()

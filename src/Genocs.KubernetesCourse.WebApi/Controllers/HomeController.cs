@@ -1,5 +1,3 @@
-using Bogus;
-using Genocs.KubernetesCourse.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,7 +15,5 @@ public class HomeController : Controller
 
     [HttpGet("")]
     public IActionResult GetHome()
-    {
-        return Ok("Welcome to Kubernates course!");
-    }
+        => Ok("Welcome to Kubernetes course!");
 }

@@ -1,0 +1,11 @@
+@url = https://localhost:56701
+
+
+### Call internal
+GET {{url}}/api/TechTalks/GetFromInternalApi HTTP/1.1
+Content-Type: application/json
+
+
+### Call internal
+GET {{url}}/api/TechTalks/PostFromInternalApi HTTP/1.1
+Content-Type: application/json
