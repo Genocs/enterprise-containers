@@ -20,12 +20,11 @@ spec:
     spec:
       containers:
         - name: rabbitmq-consumer
-          image: genocs/rabbitconsumer:1.3
+          image: genocs/rabbitconsumer:1.4
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Development"
             - name: RABBITMQ_HOST_NAME
-              #              value: "rabbitmq-0.rabbitmq-headless.default.svc.cluster.local"
               valueFrom:
                 secretKeyRef:
                   name: akvsecrets

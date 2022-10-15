@@ -55,6 +55,21 @@ kubectl apply pod-file.yaml
 
 ## 2. Secret from AKV
 
+The steps required to use AKV as secret inside kubernetes are:
+
+1. Deploy CSI provider on AKS
+2. Setup the CRD file
+3. Update the deployment file accordingly
+
 ``` ps
-kubectl apply secret-literal.yaml
+# Deploy CSI provider using helm
+.\Powershell\deployCSI-AKV-provider.ps1
+
+# Setup the Secret provider class
+kubectl apply -f .\k8s\AKV\SecretProviderClass.yml
+
+# setup the deployment
+kubectl apply -f .\k8s\ApplicationConsumer\deployment-akv.yml
 ``` 
+
+
