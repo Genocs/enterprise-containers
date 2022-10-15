@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq-consumer
-          image: genocs/rabbitconsumer:1.0
+          image: genocs/rabbitconsumer:1.3
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Development"

@@ -8,7 +8,7 @@ This section shall explain how to setup secret defined into a file.
 
 ``` ps
 # Setup secret from file
-kubectl apply secret-file.yaml
+kubectl apply -f .\k8s\Security\secret-file.yaml
 
 # Check the secrets
 kubectl get secrets

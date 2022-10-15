@@ -142,13 +142,13 @@ You can build them and they are ready to be pushed to Azure Container Registry o
 The docker images can be built using the following command:
 
 ``` ps
-Measure-Command { docker-compose -f docker-compose-dockerhub.yml build | Out-Default }
+Measure-Command { docker-compose -f .\src\docker-compose-dockerhub.yml build | Out-Default }
 ```
 
 Once the images are built successfully, we can push them to the DockerHub registry using the command
 
 ``` ps
-Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Default }
+Measure-Command { docker-compose -f .\src\docker-compose-dockerhub.yml push | Out-Default }
 ```
 
 ### [Powershell](Powersehll)
@@ -277,6 +277,12 @@ Deploy Producers & Consumers
 Execute the powershell script.
 
 ``` PS
+# Use this to setup the application with Secret coming from file
+cd Powershell 
+.\deployApplications-AKS-SecretFile.ps1
+cd ..
+
+# Use this to deploy the application using secret fetch form Key Vault
 .\Powershell\deployApplications-AKS.ps1
 ```
 

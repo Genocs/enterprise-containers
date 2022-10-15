@@ -1,4 +1,5 @@
-@url = https://localhost:56701
+#@url = https://localhost:56701
+@url = http://127.0.0.1:5123
 
 
 ### Call internal
@@ -8,4 +9,8 @@ Content-Type: application/json
 
 ### Call internal
 GET {{url}}/api/TechTalks/PostFromInternalApi HTTP/1.1
+Content-Type: application/json
+
+### Post messages
+GET {{url}}/api/TechTalks/Generate?numberOfMessages=100 HTTP/1.1
 Content-Type: application/json
