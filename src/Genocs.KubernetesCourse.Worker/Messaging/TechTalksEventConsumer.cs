@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using System.Threading.Channels;
 
 namespace Genocs.KubernetesCourse.Worker.Messaging;
 

@@ -139,16 +139,14 @@ You can build them and they are ready to be pushed to Azure Container Registry o
 
 [docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
 
-The docker images can be built using the following command:
+The docker images can be built and push to dockerhub using the following commands:
 
 ``` ps
-Measure-Command { docker-compose -f .\src\docker-compose-dockerhub.yml build | Out-Default }
-```
+# Build
+docker-compose -f .\src\docker-compose-dockerhub.yml build
 
-Once the images are built successfully, we can push them to the DockerHub registry using the command
-
-``` ps
-Measure-Command { docker-compose -f .\src\docker-compose-dockerhub.yml push | Out-Default }
+# Push
+docker-compose -f .\src\docker-compose-dockerhub.yml push
 ```
 
 ### [Powershell](Powersehll)
@@ -300,7 +298,9 @@ kubectl apply -R -f .
 Execute the `deployAutoScaler.ps1` powershell script.
 
 ``` PS
-.\Powershell\deployAutoScaler.ps1
+cd Powershell 
+.\deployAutoScaler.ps1
+cd ..
 ```
 
 **Note**
