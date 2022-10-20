@@ -42,9 +42,11 @@ if ($acrCounts -eq 0) {
         --name=$acrRegistryName `
         --resource-group=$resourceGroupName `
         --sku=Basic `
-        --admin-enabled=false `
+        --admin-enabled=true `
         --output=jsonc
 
+    Write-Host "Successfully created Azure Container Registry $acrRegistryName under resource group $resourceGroupName" -ForegroundColor Green          
+
     # If ACR registry is created without admin user, it can be updated usign the command
-    az acr update -n $acrRegistryName --admin-enabled true
+    #az acr update -n $acrRegistryName --admin-enabled true
 }

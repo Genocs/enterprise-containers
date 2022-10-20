@@ -14,11 +14,11 @@ public class HomeController : Controller
 
     [HttpGet("")]
     public IActionResult GetHome()
-        => Ok("Welcome to Kubernates course!");
+        => Ok("Welcome to Kubernetes course - Internal!");
 
     [HttpGet("GetInternal")]
     public IActionResult GetInternal()
-        => Ok("Internal call it's OK!");
+        => Ok("Welcome to Kubernetes course - Internal!");
 
     [HttpPost("PostInternal")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderCreated))]

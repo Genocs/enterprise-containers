@@ -2,27 +2,29 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: rabbitmq-producer-deployment-v2
+  name: rabbitmq-producer-int-deployment
   # namespace: default
   labels:
-    run: rabbitmq-producer-v2
-    app: apprabbitproducer-v2
+    run: rabbitmq-producer-int
+    app: rabbitmq-producer-int
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      run: rabbitmq-producer-v2
+      run: rabbitmq-producer-int
 
   template:
     metadata:
       labels:
-        run: rabbitmq-producer-v2
+        run: rabbitmq-producer-int
     spec:
       containers:
-        - name: applicationproducer-v2
-          image: genocs/rabbitproducer:1.0
+        - name: rabbitmq-producer-int
+          image: genocs/rabbitproducerint:1.3
           env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"          
             - name: RABBITMQ_HOST_NAME
               value: "rabbitmq"
             - name: RABBITMQ_USER_NAME

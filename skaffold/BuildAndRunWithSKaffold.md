@@ -48,7 +48,7 @@ profiles:
 - name: rabbitproducer
   build:
     artifacts:
-    - image: genocs/rabbitproducer
+    - image: genocs/rabbitproducer:1.3
       context: src
       kaniko:
         dockerfile: Genocs.KubernetesCourse.WebApi.dockerfile

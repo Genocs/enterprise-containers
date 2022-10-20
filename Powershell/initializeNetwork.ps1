@@ -12,7 +12,13 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$agicPublicIpName = "agic-pip",
     [parameter(Mandatory = $false)]
-    [string]$agicName = "agic-genocs"    
+    [string]$agicName = "agic-genocs",
+    [parameter(Mandatory = $false)]
+    [string]$agicVnetName = "agic-vnet",
+    [parameter(Mandatory = $false)]
+    [string]$agicSubnetName = "agic-subnet"    
+
+
 )
 
 # Login to Azure
@@ -52,15 +58,17 @@ az network public-ip create `
     --sku Standard `
     --dns-name "genocs-aks"
 
+Write-Host "Created public-ip $agicPublicIpName under resource group $agicResourceGroupName" -ForegroundColor Green
 
 # 3. Create VNET
 az network vnet create `
     -g $agicResourceGroupName `
-    -n "agic-vnet" `
+    -n $agicVnetName `
     --address-prefix 192.168.0.0/24 `
-    --subnet-name "agic-subnet" `
+    --subnet-name $agicSubnetName `
     --subnet-prefix 192.168.0.0/24
 
+Write-Host "Created vnet $agicVnetName under resource group $agicResourceGroupName" -ForegroundColor Green
 
 # 4. Create Application Gateway
 az network application-gateway create `
@@ -69,27 +77,30 @@ az network application-gateway create `
     -l $resourceGroupLocation `
     --sku Standard_v2 `
     --public-ip-address $agicPublicIpName `
-    --vnet-name "agic-vnet" `
-    --subnet "agic-subnet" `
+    --vnet-name $agicVnetName `
+    --subnet $agicSubnetName `
     --priority 1000
+
+Write-Host "Created application-gateway $agicName under resource group $agicResourceGroupName" -ForegroundColor Green
+
 
 # Enable the Application Gateway Add-on to the AKS cluster
 $appgwId = $(az network application-gateway show -g $agicResourceGroupName -n $agicName  -o tsv --query "id")
 az aks enable-addons -g $resourceGroupName -n $clusterName -a ingress-appgw --appgw-id $appgwId
 
 # Read variable needed to setup the vnet peering
-$nodeResourceGroup = $(az aks show -g $resourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
+$nodeResourceGroupName = $(az aks show -g $resourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
 
-$aksVnetName = $(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name")
+$aksVnetName = $(az network vnet list -g $nodeResourceGroupName -o tsv --query "[0].name")
 
-$aksVnetId = $(az network vnet show -g $nodeResourceGroup -n $aksVnetName -o tsv --query "id")
+$aksVnetId = $(az network vnet show -g $nodeResourceGroupName -n $aksVnetName -o tsv --query "id")
 
-$appGWVnetId = $(az network vnet show -g $agicResourceGroupName -n "agic-vnet" -o tsv --query "id")
+$appGWVnetId = $(az network vnet show -g $agicResourceGroupName -n $agicVnetName -o tsv --query "id")
 
 # Create the Peering
-az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name "agic-vnet" --remote-vnet $aksVnetId --allow-vnet-access
+az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name $agicVnetName --remote-vnet $aksVnetId --allow-vnet-access
 
-az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
+az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroupName --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
 
 
 # Configuration and security

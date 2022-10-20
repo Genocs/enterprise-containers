@@ -48,6 +48,8 @@ if ($akvCounts -eq 0) {
         --resource-group=$resourceGroupName `
         --location=$resourceGroupLocation `
         --output=jsonc
+
+    Write-Host "Successfully created Azure Key Vault $akvName under resource group $resourceGroupName" -ForegroundColor Green        
 }
 
 # Retrieve existing AKS
@@ -81,3 +83,15 @@ az keyvault set-policy `
 
 # delete resource and purge
 # az keyvault purge --subscription f20b0dac-53ce-44d4-a673-eb1fd36ee03b -n kv-genocsakst
+
+
+az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
+
+az aks pod-identity add `
+    --resource-group $resourceGroupName `
+    --cluster-name $clusterName  `
+    --namespace default  `
+    --name csi-to-key-vault  `
+    --identity-resource-id $identity.id
+
+kubectl get azureidentity

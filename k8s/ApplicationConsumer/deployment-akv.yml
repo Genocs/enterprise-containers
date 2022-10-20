@@ -20,16 +20,25 @@ spec:
     spec:
       containers:
         - name: rabbitmq-consumer
-          image: genocs/rabbitconsumer:1.3
+          image: genocs/rabbitconsumer:1.4
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Development"
             - name: RABBITMQ_HOST_NAME
-              value: "rabbitmq"
+              valueFrom:
+                secretKeyRef:
+                  name: akvsecrets
+                  key: RABBITMQ_HOST_NAME
             - name: RABBITMQ_USER_NAME
-              value: "user"
+              valueFrom:
+                secretKeyRef:
+                  name: akvsecrets
+                  key: RABBITMQ_USER_NAME
             - name: RABBITMQ_PASSWORD
-              value: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: akvsecrets
+                  key: RABBITMQ_PASSWORD
             - name: RABBITMQ_BATCH_SIZE
               value: "50"
           volumeMounts:

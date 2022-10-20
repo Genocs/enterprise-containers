@@ -17,9 +17,9 @@ public class TechTalksEventPublisher : ITechTalksEventPublisher
 
     public TechTalksEventPublisher(IConfiguration config)
     {
-        rabbitMQHostName = config.GetValue<string>("RABBITMQ_HOST_NAME");
-        rabbitMQUserName = config.GetValue<string>("RABBITMQ_USER_NAME");
-        rabbitMQPassword = config.GetValue<string>("RABBITMQ_PASSWORD");
+        rabbitMQHostName = config.GetValue<string>("RABBITMQ_HOST_NAME") ?? "localhost";
+        rabbitMQUserName = config.GetValue<string>("RABBITMQ_USER_NAME") ?? "guest";
+        rabbitMQPassword = config.GetValue<string>("RABBITMQ_PASSWORD") ?? "guest";
     }
 
     public void SendMessages(List<TechTalk> talks)

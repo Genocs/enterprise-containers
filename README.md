@@ -86,10 +86,6 @@ If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1
 
 Similarly, if you do not wish to execute the PowerShell scripts, you can execute the commands which are part of those scripts manually.
 
-### Event Driven Autoscaling
-
-There are multiple options for scaling with Kubernetes and containers in general. This demo uses `Kubernetes-based Event Driven Autoscaling (KEDA)`. RabbitMQ is used as an event source.
-
 ## Code organization
 
 ### [docker-compose](docker-compose)
@@ -102,10 +98,6 @@ Please refere to this [README](/docker-compose/README.md) for details.
 
 Contains the explanation files.
 
-Contains the source code for an hypothetical application.
-
-`Genocs.KubernetesCourse.WebApi` contains the code generating the events / messages which are published to a RabbitMQ queue.
-
 - [aks-preview](aks-preview.md)
 - [azure-developer-community](azure-developer-community.md)
 - [minikube-wsl2](minikube-wsl2.md)
@@ -113,7 +105,9 @@ Contains the source code for an hypothetical application.
 
 ### [src](src)
 
-Contains the source code for a model class used by two services:
+Contains the source code for an hypothetical application.
+
+It contains the source code for a model class used by two services:
 
 - The **Producers**: a WebApi that send messages to RabbitMQ cluster
 - The **Consumers**: a Worker listening RabbitMQ messages.
@@ -122,11 +116,7 @@ Contains the source code for a model class used by two services:
 
 `Genocs.KubernetesCourse.Worker` contains the consumer code processing RabbitMQ messages.
 
-Both the Producer and Consumer uses the common data model. In order to build these you could use Dockerfile. We define the [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile) and [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile). These are built [docker-compose-build](/src/docker-compose-build.yml) file.
-
-**NOTE**
-
-The RabbitMQ cluster is installed inside the same kubernetes cluster.
+Both the Producer and Consumer uses the common data model.
 
 In order to build these using Dockerfile:
 
@@ -139,17 +129,19 @@ You can build them and they are ready to be pushed to Azure Container Registry o
 
 [docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
 
-The docker images can be built using the following command:
+The docker images can be built and push to dockerhub using the following commands:
 
 ``` ps
-Measure-Command { docker-compose -f docker-compose-dockerhub.yml build | Out-Default }
+# Build
+docker-compose -f .\src\docker-compose-dockerhub.yml build
+
+# Push
+docker-compose -f .\src\docker-compose-dockerhub.yml push
 ```
 
-Once the images are built successfully, we can push them to the DockerHub registry using the command
+**NOTE**
 
-``` ps
-Measure-Command { docker-compose -f docker-compose-dockerhub.yml push | Out-Default }
-```
+The RabbitMQ cluster is installed inside the same kubernetes cluster.
 
 ### [Powershell](Powersehll)
 
@@ -181,10 +173,8 @@ The Skaffold and Kaniko Kubernetes cluster setup.
 
 This allows to setup Kubernetes cluster on Google Cloud.
 
-
 # Setup - Details
 
-## Steps
 1. Install Azure Container Registry
 2. Install Kubernetes Cluster
 3. Install Azure Key Vault
@@ -277,8 +267,19 @@ Deploy Producers & Consumers
 Execute the powershell script.
 
 ``` PS
-.\Powershell\deployApplications-AKS.ps1
+# Use this to setup the application with Secret coming from file
+cd Powershell 
+.\deployApplications-AKS-SecretFile.ps1
+cd ..
 ```
+
+``` PS
+# Use this to deploy the application using secret fetch form Key Vault
+cd Powershell 
+.\Powershell\deployApplications-AKS.ps1
+cd ..
+```
+
 
 The `deployApplications-AKS` powershell script deploys the RabbitMQConsumer and RabbitMQProducer in the correct order. 
 
@@ -294,7 +295,9 @@ kubectl apply -R -f .
 Execute the `deployAutoScaler.ps1` powershell script.
 
 ``` PS
-.\Powershell\deployAutoScaler.ps1
+cd Powershell 
+.\deployAutoScaler.ps1
+cd ..
 ```
 
 **Note**
@@ -318,7 +321,20 @@ If you do not wish to run the individual PowerShell scripts, you can run one sin
 We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the Application producer WebApi which will be used to generate the messages onto RabbitMQ queue.
 
 ``` bash
+# Get services
 kubectl get svc
+
+# Get pod
+kubectl get pod
+
+# Get deployments
+kubectl get deployment
+
+# Get secrets
+kubectl get secret
+
+# Get custom resource definition
+kubectl get crd
 ```
 
 ![List of all Kubernetes services](/images/all-services.png)
@@ -397,7 +413,7 @@ Once all the messages are processed, KEDA will scale down the pods and the deplo
 List Custom Resource Definition
 
 ``` bash
-kubeclt get crd
+kubectl get crd
 ```
 
 ![autoscaled down consumers](/images/KEDA-CRD.PNG)
