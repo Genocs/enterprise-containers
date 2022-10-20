@@ -101,13 +101,3 @@ $appGWVnetId = $(az network vnet show -g $agicResourceGroupName -n $agicVnetName
 az network vnet peering create -n AppGWtoAKSVnetPeering -g $agicResourceGroupName --vnet-name $agicVnetName --remote-vnet $aksVnetId --allow-vnet-access
 
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroupName --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
-
-
-# Configuration and security
-# To Secure the configuration on Azure Key Vault create a User managed Identity
-# az aks pod-identity add `
-#    --resource-group $resourceGroupName `
-#    --cluster-name $clusterName `
-#    --namespace default `
-#    --name csi-to-key-vault `
-#    --identity-resource-id /subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/UTU-RG-RD/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault

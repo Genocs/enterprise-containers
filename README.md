@@ -2,10 +2,12 @@
 
 ![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
 
-Setup Kubernetes cluster to be production ready isn't a simple and straightforward task. It requires to take in consideration many topics.
+Setup Kubernetes cluster to be production ready isn't a simple, straightforward task. It requires to take in consideration many topics.
 
 
-In this walkthrough will be implemented the steps required to setup the cluster. This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
+In this walkthrough we will setup the steps required to have a Kubernetes cluster up and runing.
+
+This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
 
 ## Prerequisites
 
@@ -26,36 +28,44 @@ The setup process can be spitted into different steps:
 - Monitoring
 - Application
 
-
-## Setup - Overview
+# Setup - Overview
 
 During this step we are going to setup Kubernetes cluster tackling the following components:
 
-- Setup private images repository
-- Setup the cluster
-- Setup the secrets vault
-- Setup network infrastructure 
-- Secure secrets hiding sensitive data
+- Setup private Docker images repository
+- Setup the Kuberentes cluster
+- Setup the vault for secrets 
+- Secure secrets
+- Setup network 
 - Setup autoscaler
 
 ### Monitoring
 
-The monitoring will be implemented using open source components. The implementation will monitor both infrastructure and application side:
+The implementation will monitor both infrastructure and application side.
+
+The monitoring will be implemented using different approch. Some are open source, other don't. 
+
+Open source Components uses in this demo:
 
 - [Grafana](https://grafana.com/)
 - [Jaeger](https://www.jaegertracing.io/)
 - [Promotheus](https://prometheus.io/)
 
-The entreprise version require an active subscription or to pay a fee.  
+***NOTE:*** 
+The open source component have the entreprise version. It require to have active subscription if you plann to uses them.  
 
 ### Security and Networking
 
-Security and Networking context will implement all the components that allows to handle routing, to send requests to services throughout a reverse proxy, secure APIs calls using SSL termination.
+Security and Networking context will implement all the components that allows to handle:
+- routing (forward requests to the services throughout a reverse proxy
+- termination (secure APIs calls by SSL or TLS) 
+- throttling
+
 
 The main components are:
 
 - Public IP
-- Vnet with Subnet
+- Vnet and Subnet
 - Api Gateway Ingress Controller
 
 There are various products out of the box that can be used to implement the solution. All of them have PROS and CONS.
@@ -73,7 +83,7 @@ Authentication and authorization are implemented using `OAuth2`. `Kong` provides
 - [OAuth2](https://oauth.net/2/)
 - [OpenId](https://openid.net/connect/)
 
-## KEDA - Kubernetes-based Event Driven Autoscaling
+## Autoscaler
 
 There are multiple options for scaling Kubernetes and containers in general.
 
@@ -90,13 +100,13 @@ Similarly, if you do not wish to execute the PowerShell scripts, you can execute
 
 ### [docker-compose](docker-compose)
 
-Contains the docker compose files to install on docker a bunch of enterprise level tools.
+Contains the docker compose files to install a bunch of enterprise level tools.
 
-Please refere to this [README](/docker-compose/README.md) for details.
+Please refer to this [README](/docker-compose/README.md) for details.
 
 ### [docs](docs)
 
-Contains the explanation files.
+Contains some useful documentation like:
 
 - [aks-preview](aks-preview.md)
 - [azure-developer-community](azure-developer-community.md)
@@ -110,9 +120,12 @@ Contains the source code for an hypothetical application.
 It contains the source code for a model class used by two services:
 
 - The **Producers**: a WebApi that send messages to RabbitMQ cluster
+- The **Internal Service**: a WebApi that can be used only inside the cluster
 - The **Consumers**: a Worker listening RabbitMQ messages.
 
-`Genocs.KubernetesCourse.WebApi` contains the code for generating the messages which are published to a RabbitMQ queue.
+`Genocs.KubernetesCourse.WebApi` contains the code for generating the messages which are published to a RabbitMQ queue, as well as to call an internal WebApi.
+
+`Genocs.KubernetesCourse.Internal.WebApi` contains the code for the WebApi used only inside the cluster.
 
 `Genocs.KubernetesCourse.Worker` contains the consumer code processing RabbitMQ messages.
 
@@ -121,13 +134,13 @@ Both the Producer and Consumer uses the common data model.
 In order to build these using Dockerfile:
 
 - [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile)
+- [Genocs.KubernetesCourse.Internal.WebApi](/src/Genocs.KubernetesCourse.Internal.WebApi.dockerfile)
 - [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile)
 
-You can build them and they are ready to be pushed to Azure Container Registry or DockerHub.
+You can build them and they are ready to be pushed to:
 
-[docker-compose ACR](/src/docker-compose-acr.yml)
-
-[docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
+- Azure Container Registry [docker-compose ACR](/src/docker-compose-acr.yml)
+- DockerHub [docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
 
 The docker images can be built and push to dockerhub using the following commands:
 
@@ -138,10 +151,8 @@ docker-compose -f .\src\docker-compose-dockerhub.yml build
 # Push
 docker-compose -f .\src\docker-compose-dockerhub.yml push
 ```
-
 **NOTE**
-
-The RabbitMQ cluster is installed inside the same kubernetes cluster.
+Please update the yml files with the correct image version before use them.
 
 ### [Powershell](Powersehll)
 
@@ -151,7 +162,10 @@ Contains the helper PowerShell scripts to:
 - To proxy into the Kubernetes control plane
 - To deploy the application
 - To delete the application
-- To delete the resource group (**AKS is expensive to keep alive**)
+- To delete the resource group
+
+
+**NOTE: AKS is expensive to keep alive**
 
 ### [k8s](k8s)
 
@@ -205,7 +219,7 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 
 ### 2.3 Initialize AKV
 
-The **AKV** Azure Key Vault is used to store every secret used by the application, as connection string, API Key and so on, in a safe place.
+The **AKV** Azure Key Vault is used to store every secret used by the application in a safe place. Secret data are: connection string, API Key and so on.
 
 Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with default values from root directory
 
@@ -262,7 +276,7 @@ kubectl get all -n keda
 
 ### 2.8 Deploy Demo Application
 
-Deploy Producers & Consumers
+Deploy Producers Internal Service & Consumers.
 
 Execute the powershell script.
 
@@ -274,12 +288,11 @@ cd ..
 ```
 
 ``` PS
-# Use this to deploy the application using secret fetch form Key Vault
+# Use this to deploy the application using secret coming form Key Vault
 cd Powershell 
 .\Powershell\deployApplications-AKS.ps1
 cd ..
 ```
-
 
 The `deployApplications-AKS` powershell script deploys the RabbitMQConsumer and RabbitMQProducer in the correct order. 
 
@@ -316,7 +329,7 @@ If you do not wish to run the individual PowerShell scripts, you can run one sin
 .\Powershell\deployAll.ps1
 ```
 
-### 2.10 Get list of all the services deployed in the cluster
+### 2.10 Get list of the resources
 
 We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the Application producer WebApi which will be used to generate the messages onto RabbitMQ queue.
 
@@ -360,20 +373,29 @@ kubectl get deploy -w
 
 Initially there is 1 instance of rabbitmq-consumer and 2 replicas of the rabbitmq-producer (Producer) deployed in the cluster.
 
-### 2.12 Port forward for RabbitMQ management UI
 
-We will use port forwarding approach to access the RabbitMQ management UI.
+### 2.12 Browse RabbitMQ Management UI
+
+RabbitMQ Management UI is enabled by port forwarding.
+
+In order to do this, open an bash shell and run the command. 
+
+Please keep the shell open to keep open the port fowarding.
 
 ``` bash
 kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
-### 2.13 Browse RabbitMQ Management UI
-
+Open the web browser:
 http://localhost:15672/
 
-Login to the management UI using credentials as `user` and `PASSWORD`. Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
+Login to the management UI using credentials as `user` and `PASSWORD`. 
 
+Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
+
+### 2.13 Generate load using `Visual Studio code Extension`
+
+TBV
 ### 2.14 Generate load using `Postman`
 
 I am using [Postman](https://www.getpostman.com/) to submit a POST request to the API which generates 2000 messages onto a RabbitMQ queue named `hello`. You can use any other command line tool like CURL to submit a GET request.
@@ -422,10 +444,53 @@ kubectl get crd
 
 As part of the KEDA installation, ScaledObject and TriggerAuthentications are deployed on the Kubernetes cluster.
 
-## Acknowledgements
+---
+
+# Resource Groups
+
+This demo will create all the Azure Resource inside:  
+- rg-aks-genocs
+- rg-agic-genocs
+- MC_rg-aks-genocs_aks-genocs_westeurope
+- DefaultResourceGroup-WEU
+
+## 1. rg-aks-genocs
+aks-genocs - Kubernetes service
+genocscontainer - Container registry
+kv-genocsakst - Key vault
+## 2. rg-agic-genocs
+
+- agic-genocs - Application gateway
+- agic-pip - Public IP address
+- agic-vnet - Virtual network
+
+## 3. MC_rg-aks-genocs_aks-genocs_westeurope
+
+- 4c0f07f9-b962-478a-a875-be77a79462dc      Public IP address           West Europe
+- aks-agentpool-33168902-nsg                Network security group      West Europe
+- aks-agentpool-33168902-routetable         Route table                 West Europe
+- aks-genocs-agentpool                      Managed Identity            West Europe
+- aks-nodepool1-12518635-vmss               Virtual machine scale set   West Europe
+- aks-vnet-33168902                         Virtual network             West Europe
+- kubernetes                                Load balancer               West Europe
+- omsagent-aks-genocs                       Managed Identity            West Europe
+- pvc-49df2627-0ef7-4264-8441-f0e36b629bf2  Disk                        West Europe
+
+## 4. DefaultResourceGroup-WEU
+
+---
+
+
+# Acknowledgements
 
 A lot of people inspired me and provided unevaluable amount of information:
 
 Here some of them:
 - [NileshGule](https://github.com/NileshGule/)
 - [DevMentors](https://github.com/devmentors/)
+
+
+
+# References
+
+- [Hands-on-Kubernetes-on-Azure-Third-Edition](https://github.com/PacktPublishing/Hands-on-Kubernetes-on-Azure-Third-Edition)
