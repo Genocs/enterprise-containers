@@ -19,13 +19,13 @@ $rgExists = az group exists --name $resourceGroupName
 Write-Host "$resourceGroupName exists: $rgExists" -ForegroundColor Red
 
 if ($rgExists -eq $true) {
-    Write-Host "Start delete AKS cluster " $clusterName -ForegroundColor Yellow
+    Write-Host "Start delete AKS cluster $clusterName" -ForegroundColor Yellow
     az aks delete --resource-group $resourceGroupName --name $clusterName --yes
     Write-Host "AKS cluster $resourceGroupName deleted" -ForegroundColor Yellow
 
     Write-Host "Start delete $resourceGroupName" -ForegroundColor Yellow
     az group delete --name=$resourceGroupName --yes
-    Write-Host $resourceGroupName " deleted" -ForegroundColor Yellow
+    Write-Host "$resourceGroupName  deleted" -ForegroundColor Yellow
 }
 
 # 2. Delete resource group if it exist

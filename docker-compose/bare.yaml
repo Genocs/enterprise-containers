@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   rabbitmq:
@@ -10,7 +10,7 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-      - 15692:15692      
+      - 15692:15692
     volumes:
       - rabbitmq:/var/lib/rabbitmq
     networks:
@@ -31,7 +31,7 @@ services:
 
   redis:
     image: redis
-    hostname: redis_node_1        
+    hostname: redis_node_1
     container_name: redis_cache
     ports:
       - 6379:6379

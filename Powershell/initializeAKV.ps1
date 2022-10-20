@@ -73,7 +73,7 @@ Write-Host "Client ID: " $identity.clientId
 Write-Host "Azure Key Vault: " $akvName
 Write-Host "TenantId: " $tenantId
 
-Write-Host "Please update the SecretProviderClass.yml userAssignedIdentityID, keyvaultName, tenantId, accordingly" -ForegroundColor Green
+Write-Host "Please update the SecretProviderClass.yaml userAssignedIdentityID, keyvaultName, tenantId, accordingly" -ForegroundColor Green
 
 Write-Host "Setting policy to access secrets in Key Vault with Client Id"
 az keyvault set-policy `

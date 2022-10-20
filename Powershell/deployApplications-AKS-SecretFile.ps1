@@ -22,7 +22,7 @@ Write-Host "Secrets by file deployed successfully" -ForegroundColor Cyan
 # Consumers
 Write-Host "Deploying Consumer" -ForegroundColor Yellow
 Set-Location $applicationConsumerRootDirectory
-kubectl apply --filename deployment-file.yml
+kubectl apply --filename deployment-file.yaml
 Write-Host "Consumer Worker deployed successfully" -ForegroundColor Cyan
 
 #Producers

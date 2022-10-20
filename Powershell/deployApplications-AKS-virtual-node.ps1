@@ -5,7 +5,7 @@ Write-Host "Starting deployment of application and services" -ForegroundColor Ye
 
 Write-Host "Deploying Application Consumer" -ForegroundColor Yellow
 Set-Location $applicationConsumerRootDirectory
-kubectl apply --filename consumer-deployment-virtual-node.yml
+kubectl apply --filename consumer-deployment-virtual-node.yaml
 
 Write-Host "Application Consumer deployed successfully" -ForegroundColor Cyan
 

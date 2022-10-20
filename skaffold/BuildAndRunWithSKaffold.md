@@ -63,7 +63,7 @@ profiles:
   deploy:
     kubectl:
       manifests:
-        - k8s/ApplicationProducer/*.yml
+        - k8s/ApplicationProducer/*.yaml
 
 - name: rabbitconsumer
   build:
@@ -83,7 +83,7 @@ profiles:
   deploy:
     kubectl:
       manifests:
-        - k8s/ApplicationConsumer/*.yml
+        - k8s/ApplicationConsumer/*.yaml
 ```
 
 After modifying the `skaffold.yaml`, execute the following command.

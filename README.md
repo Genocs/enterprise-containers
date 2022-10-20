@@ -139,20 +139,20 @@ In order to build these using Dockerfile:
 
 You can build them and they are ready to be pushed to:
 
-- Azure Container Registry [docker-compose ACR](/src/docker-compose-acr.yml)
-- DockerHub [docker-compose Dockerhub](/src/docker-compose-dockerhub.yml)
+- Azure Container Registry [docker-compose ACR](/src/docker-compose-acr.yaml)
+- DockerHub [docker-compose Dockerhub](/src/docker-compose-dockerhub.yaml)
 
 The docker images can be built and push to dockerhub using the following commands:
 
 ``` ps
 # Build
-docker-compose -f .\src\docker-compose-dockerhub.yml build
+docker-compose -f .\src\docker-compose-dockerhub.yaml build
 
 # Push
-docker-compose -f .\src\docker-compose-dockerhub.yml push
+docker-compose -f .\src\docker-compose-dockerhub.yaml push
 ```
 **NOTE**
-Please update the yml files with the correct image version before use them.
+Please update the yaml files with the correct image version before use them.
 
 ### [Powershell](Powersehll)
 
@@ -437,12 +437,16 @@ List Custom Resource Definition
 ``` bash
 kubectl get crd
 ```
-
 ![autoscaled down consumers](/images/KEDA-CRD.PNG)
 
----
 
 As part of the KEDA installation, ScaledObject and TriggerAuthentications are deployed on the Kubernetes cluster.
+
+### 2.16 Delete all resources
+
+``` PS
+.\Powershell\deleteRG.ps1
+```
 
 ---
 
@@ -455,9 +459,10 @@ This demo will create all the Azure Resource inside:
 - DefaultResourceGroup-WEU
 
 ## 1. rg-aks-genocs
-aks-genocs - Kubernetes service
-genocscontainer - Container registry
-kv-genocsakst - Key vault
+
+- aks-genocs - Kubernetes service
+- genocscontainer - Container registry
+- kv-genocsakst - Key vault
 ## 2. rg-agic-genocs
 
 - agic-genocs - Application gateway

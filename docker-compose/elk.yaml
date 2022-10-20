@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   elasticsearch:
@@ -48,8 +48,8 @@ services:
     secrets:
       - source: logstash.conf
         target: /usr/share/logstash/pipeline/logstash.conf
-      - source: logstash.yml
-        target: /usr/share/logstash/config/logstash.yml
+      - source: logstash.yaml
+        target: /usr/share/logstash/config/logstash.yaml
       - source: logstash.keystore
         target: /usr/share/logstash/config/logstash.keystore
       - source: ca.crt

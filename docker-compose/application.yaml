@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   rabbitproducer:
@@ -27,7 +27,7 @@ services:
       - RABBITMQ_HOST_NAME=rabbitmq
       - RABBITMQ_USER_NAME=guest
       - RABBITMQ_PASSWORD=guest
-      - RABBITMQ_BATCH_SIZE=50      
+      - RABBITMQ_BATCH_SIZE=50
 
   testmetrics:
     image: genocs/testmetrics

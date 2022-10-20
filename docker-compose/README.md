@@ -3,22 +3,22 @@
 Docker compose folder contains everything required to setup an entire ecosystem from scratch
 
 The folder contains:
- - bare.yml
- - monitor.yml
- - networking.yml
- - elk.yml
- - sqldb.yml
- - neo4jdb.yml
+ - bare.yaml
+ - monitor.yaml
+ - networking.yaml
+ - elk.yaml
+ - sqldb.yaml
+ - neo4jdb.yaml
 
  ## Bare
 
- bare.yml file allows to run:
+ bare.yaml file allows to run:
  - RabbitMQ
  - Redis
  - MongoDB
 
 ``` Powershell
-docker-compose -f ./bare.yml up -d
+docker-compose -f ./bare.yaml up -d
 ```
 
 ### RabbitMQ
@@ -40,7 +40,7 @@ TBV
 
  ## Monitor
 
- monitor.yml file allows to run:
+ monitor.yaml file allows to run:
  - Grafana
  - Promotheus
  - Jaeger
@@ -48,19 +48,19 @@ TBV
  - Seq
 
 ``` Powershell
-docker-compose -f ./monitor.yml up -d
+docker-compose -f ./monitor.yaml up -d
 ```
 
 
  ## Networking
 
- monitor.yml file allows to run:
+ monitor.yaml file allows to run:
  - Consul
  - Fabio
  - Vault
 
 ``` Powershell
-docker-compose -f ./networking.yml up -d
+docker-compose -f ./networking.yaml up -d
 ```
 
  ## Elastic Stack
@@ -74,24 +74,24 @@ docker-compose -f ./networking.yml up -d
  with Elastic Search healthcheck
 
 ``` Powershell
-docker-compose -f ./elk.yml up -d
+docker-compose -f ./elk.yaml up -d
 ```
 
 
  ## Sql Server
 
- sqldb.yml file allows to run:
+ sqldb.yaml file allows to run:
  - Microsoft SQL Server Database
 
 ``` Powershell
-docker-compose -f ./sqldb.yml up -d
+docker-compose -f ./sqldb.yaml up -d
 ```
 
  ## neo4j Database
 
- neo4jdb.yml file allows to run:
+ neo4jdb.yaml file allows to run:
  - Neo4j Community Database
 
 ``` Powershell
-docker-compose -f ./neo4jdb.yml up -d
+docker-compose -f ./neo4jdb.yaml up -d
 ```

@@ -66,10 +66,10 @@ The steps required to use AKV as secret inside kubernetes are:
 .\Powershell\deployCSI-AKV-provider.ps1
 
 # Setup the Secret provider class
-kubectl apply -f .\k8s\AKV\SecretProviderClass.yml
+kubectl apply -f .\k8s\AKV\SecretProviderClass.yaml
 
 # setup the deployment
-kubectl apply -f .\k8s\ApplicationConsumer\deployment-akv.yml
+kubectl apply -f .\k8s\ApplicationConsumer\deployment-akv.yaml
 ``` 
 
 

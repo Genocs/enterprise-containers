@@ -98,11 +98,11 @@ http://20.198.210.175/api/TechTalks/Generate?numberOfMessages=5000
 ## Trigger Alert Manager Alert
 
 ```bash
-kubectl apply -f api-deployment.yml
+kubectl apply -f api-deployment.yaml
 ```
 
 ## Remove Alert Manager trigger
 
 ```bash
-kubectl delete -f api-deployment.yml
+kubectl delete -f api-deployment.yaml
 ```

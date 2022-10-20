@@ -16,7 +16,7 @@ Write-Host "Starting deployment of application and services" -ForegroundColor Ye
 
 Write-Host "Deploying Consumer" -ForegroundColor Yellow
 Set-Location $applicationConsumerRootDirectory
-kubectl apply --filename deployment.yml
+kubectl apply --filename deployment.yaml
 
 Write-Host "Consumer Worker deployed successfully" -ForegroundColor Cyan
 
