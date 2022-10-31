@@ -1,6 +1,6 @@
 namespace Genocs.KubernetesCourse.Worker.Messaging;
 
-public interface ITechTalksEventConsumer
+public interface IRabbitMQEventConsumer
 {
     void Initialize();
     public void Close();

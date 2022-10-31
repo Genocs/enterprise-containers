@@ -13,7 +13,7 @@ Log.Logger = new LoggerConfiguration()
 Microsoft.Extensions.Hosting.IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
-        services.AddSingleton<ITechTalksEventConsumer, TechTalksEventConsumer>();
+        services.AddSingleton<IRabbitMQEventConsumer, RabbitMQEventConsumer>();
 
         services.AddHostedService<ConsoleHostedService>();
 

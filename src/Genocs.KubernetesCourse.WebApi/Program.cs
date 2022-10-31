@@ -44,7 +44,7 @@ builder.Services.Configure<HealthCheckPublisherOptions>(options =>
     options.Predicate = check => check.Tags.Contains("ready");
 });
 
-builder.Services.AddTransient<ITechTalksEventPublisher, TechTalksEventPublisher>();
+builder.Services.AddTransient<IRabbitMQPublisher, RabbitMQPublisher>();
 
 
 builder.WebHost.UseSentry(options =>

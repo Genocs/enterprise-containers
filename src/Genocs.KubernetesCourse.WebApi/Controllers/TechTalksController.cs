@@ -11,20 +11,20 @@ namespace Genocs.KubernetesCourse.WebApi.Controllers;
 [Route("api/[controller]")]
 public class TechTalksController : Controller
 {
-    private readonly ITechTalksEventPublisher _messageQueue;
+    private readonly IRabbitMQPublisher _messagePublisher;
     private readonly InternalApiClient _internalApiClient;
 
-    public TechTalksController(ITechTalksEventPublisher messageQueue, InternalApiClient internalApiClient)
+    public TechTalksController(IRabbitMQPublisher messagePublisher, InternalApiClient internalApiClient)
     {
-        _messageQueue = messageQueue ?? throw new ArgumentNullException(nameof(messageQueue));
+        _messagePublisher = messagePublisher ?? throw new ArgumentNullException(nameof(messagePublisher));
         _internalApiClient = internalApiClient ?? throw new ArgumentNullException(nameof(internalApiClient));
     }
 
     // GET: api/TechTalks
     [HttpGet]
-    public IEnumerable<TechTalk> GetAll()
+    public IEnumerable<ApplicationMessage> GetAll()
     {
-        List<TechTalk> techTalks = new List<TechTalk>();
+        List<ApplicationMessage> techTalks = new List<ApplicationMessage>();
 
         throw new UnauthorizedAccessException("Throwing sample message for Sentry");
 
@@ -63,10 +63,10 @@ public class TechTalksController : Controller
             "400 - Expert"
         };
 
-        var techTalks = new Faker<TechTalk>()
+        var messages = new Faker<ApplicationMessage>()
         .StrictMode(true)
         .RuleFor(t => t.Id, f => f.Random.Number(1, 1000))
-        .RuleFor(t => t.TechTalkName, f => f.Lorem.Word())
+        .RuleFor(t => t.MessageName, f => f.Lorem.Word())
         .RuleFor(t => t.CategoryId, f => f.Random.Number(1, 5))
         .RuleFor(t => t.Category, new Category
         {
@@ -82,8 +82,8 @@ public class TechTalksController : Controller
         });
 
         // generate required number of dummy TechTalks
-        var dummyTechTalks = techTalks.Generate(numberOfMessages);
-        _messageQueue.SendMessages(dummyTechTalks);
+        var dummyTechTalks = messages.Generate(numberOfMessages);
+        _messagePublisher.SendMessages(dummyTechTalks);
         return Ok();
     }
 

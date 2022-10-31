@@ -2,7 +2,7 @@ using Genocs.KubernetesCourse.Contracts;
 
 namespace Genocs.KubernetesCourse.WebApi.Services.Interfaces;
 
-public interface ITechTalksEventPublisher
+public interface IRabbitMQPublisher
 {
-    void SendMessages(List<TechTalk> talks);
+    void SendMessages(List<ApplicationMessage> messages);
 }

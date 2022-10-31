@@ -5,9 +5,9 @@ namespace Genocs.KubernetesCourse.Worker;
 public class ConsoleHostedService :
     IHostedService
 {
-    private readonly ITechTalksEventConsumer _techTalksEventConsumer;
+    private readonly IRabbitMQEventConsumer _techTalksEventConsumer;
 
-    public ConsoleHostedService(ITechTalksEventConsumer techTalksEventConsumer)
+    public ConsoleHostedService(IRabbitMQEventConsumer techTalksEventConsumer)
     {
         _techTalksEventConsumer = techTalksEventConsumer ?? throw new ArgumentNullException(nameof(techTalksEventConsumer));
     }

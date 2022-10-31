@@ -4,14 +4,14 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>7e653cbb-6215-43ef-8e63-852ea7fc91ed</UserSecretsId>
+		<UserSecretsId>genocs-kubernetes-course</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
 
 	<ItemGroup>
-		<PackageReference Include="prometheus-net" Version="6.0.0" />
-		<PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
+		<PackageReference Include="prometheus-net" Version="7.0.0" />
+		<PackageReference Include="prometheus-net.AspNetCore" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.21.0" />
