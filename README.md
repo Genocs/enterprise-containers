@@ -2,10 +2,9 @@
 
 ![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
 
-Setup Kubernetes cluster to be production ready isn't a simple, straightforward task. It requires to take in consideration many topics.
+Setup Kubernetes cluster to be production ready isn't a simple task. It requires to take in consideration many topics.
 
-
-In this walkthrough we will setup the steps required to have a Kubernetes cluster up and runing.
+In this walkthrough we will setup the steps required to have a Kubernetes cluster up and running.
 
 This proposal is thought as to be used on Azure, even though most of the options could be reused for any cloud provider like Google Cloud or AWS.
 
@@ -33,7 +32,7 @@ The setup process can be spitted into different steps:
 During this step we are going to setup Kubernetes cluster tackling the following components:
 
 - Setup private Docker images repository
-- Setup the Kuberentes cluster
+- Setup the Kubernetes cluster
 - Setup the vault for secrets 
 - Secure secrets
 - Setup network 
@@ -43,16 +42,16 @@ During this step we are going to setup Kubernetes cluster tackling the following
 
 The implementation will monitor both infrastructure and application side.
 
-The monitoring will be implemented using different approch. Some are open source, other don't. 
+The monitoring will be implemented using different approach. Some are open source, other don't. 
 
-Open source Components uses in this demo:
+Open-source Components uses in this demo:
 
 - [Grafana](https://grafana.com/)
 - [Jaeger](https://www.jaegertracing.io/)
 - [Promotheus](https://prometheus.io/)
 
 ***NOTE:*** 
-The open source component have the entreprise version. It require to have active subscription if you plann to uses them.  
+The open-source components have the entreprise version. It requires to have active subscription if you plan to use them.  
 
 ### Security and Networking
 
@@ -115,7 +114,7 @@ Contains some useful documentation like:
 
 ### [src](src)
 
-Contains the source code for an hypothetical application.
+Contains the source code for a hypothetical application.
 
 It contains the source code for a model class used by two services:
 
@@ -203,7 +202,7 @@ This allows to setup Kubernetes cluster on Google Cloud.
 
 The **ACR** (Azure Container Registry) allows to store Docker images inside a private repositoy 
 
-Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with default values from root directory
+Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\initializeACR.ps1
@@ -211,7 +210,7 @@ Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with defaul
 
 ### 2.2 Initialize AKS cluster
 
-Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with default values from root directory
+Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\initializeAKS.ps1
@@ -221,7 +220,7 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 
 The **AKV** Azure Key Vault is used to store every secret used by the application in a safe place. Secret data are: connection string, API Key and so on.
 
-Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with default values from root directory
+Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\initializeAKV.ps1
@@ -234,9 +233,9 @@ The **AKS** will use a network infrastructure composed by:
 - VNET
 - AGIC
 
-The Poweshell script will *'Create peering beetween AGIC and AKS and viceversa'* as well
+The Poweshell script will *'Create peering beetween AGIC and AKS and viceversa'* as well.
 
-Run [initializeNetwork](/Powershell/initializeNetwork.ps1) powershell script with default values from root directory
+Run [initializeNetwork](/Powershell/initializeNetwork.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\initializeNetwork.ps1
@@ -288,7 +287,7 @@ cd ..
 ```
 
 ``` PS
-# Use this to deploy the application using secret coming form Key Vault
+# Use this to deploy the application using secret coming from Key Vault
 cd Powershell 
 .\Powershell\deployApplications-AKS.ps1
 cd ..
@@ -378,9 +377,9 @@ Initially there is 1 instance of rabbitmq-consumer and 2 replicas of the rabbitm
 
 RabbitMQ Management UI is enabled by port forwarding.
 
-In order to do this, open an bash shell and run the command. 
+In order to do this, open a bash shell and run the command. 
 
-Please keep the shell open to keep open the port fowarding.
+Please keep the shell open to keep open the port forwarding.
 
 ``` bash
 kubectl port-forward svc/rabbitmq 15672:15672
@@ -418,7 +417,7 @@ See the number of containers for consumer grow to adjust the messages and also t
 
 ![autoscaling consumers](/images/pods-and-deployments-autoscaled.png)
 
-On the left hand side of the screen you can see the pods auto scaled and on the right we see the deploymnets autoscaled progressively to 2, 4, 8, 16 and 30.
+On the left-hand side of the screen you can see the pods auto scaled and on the right we see the deploymnets autoscaled progressively to 2, 4, 8, 16 and 30.
 
 While the messages are being processed, we can also observe the RabbitMQ management UI.
 
