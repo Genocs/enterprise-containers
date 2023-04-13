@@ -180,7 +180,7 @@ This was required before Helm 3.0 for the Tiller service. With helm 3.0, Tiller 
 
 Contains the terraform Kubernetes cluster setup. The setup is primary meant to be used on Azure. Anyway, deploy on other cloud Provider is quite straightforward.
 
-## [skaffold](skaffold)
+### [skaffold](skaffold)
 
 The Skaffold and Kaniko Kubernetes cluster setup.
 
