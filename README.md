@@ -497,4 +497,4 @@ Here some of them:
 
 # References
 
-- [Hands-on-Kubernetes-on-Azure-Third-Edition](https://git
+- [Hands-on-Kubernetes-on-Azure-Third-Edition](https://github.com/PacktPublishing/Hands-on-Kubernetes-on-Azure-Third-Edition)
