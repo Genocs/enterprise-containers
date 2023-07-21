@@ -10,7 +10,7 @@ Param(
     [parameter(Mandatory = $false)]
     [int16]$workerNodeCount = 1,
     [parameter(Mandatory = $false)]
-    [string]$kubernetesVersion = "1.24.6",
+    [string]$kubernetesVersion = "1.26.3",
     [parameter(Mandatory = $false)]
     [string]$kubernetesVMSize = "Standard_DS2_v2",    
     [parameter(Mandatory = $false)]
@@ -57,6 +57,7 @@ if ($aksCounts -eq 0) {
         --node-vm-size=$kubernetesVMSize `
         --kubernetes-version=$kubernetesVersion `
         --generate-ssh-keys `
+        --network-plugin azure `
         --enable-addons azure-keyvault-secrets-provider `
         --enable-addons monitoring `
         --enable-managed-identity `

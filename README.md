@@ -150,6 +150,7 @@ docker-compose -f .\src\docker-compose-dockerhub.yaml build
 # Push
 docker-compose -f .\src\docker-compose-dockerhub.yaml push
 ```
+
 **NOTE**
 Please update the yaml files with the correct image version before use them.
 

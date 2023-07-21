@@ -82,10 +82,10 @@ az keyvault set-policy `
     --spn $identity.clientId
 
 # delete resource and purge
-# az keyvault purge --subscription f20b0dac-53ce-44d4-a673-eb1fd36ee03b -n kv-genocsakst
+# az keyvault purge --subscription $subscriptionId -n $akvName
 
-
-az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
+# This command not needed if you have already enabled pod identity
+#az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
 
 az aks pod-identity add `
     --resource-group $resourceGroupName `

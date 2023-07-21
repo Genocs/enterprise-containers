@@ -138,7 +138,7 @@ az aks update -g "rg-aks" -n "aks" --enable-pod-identity-with-kubenet
 az aks pod-identity add --resource-group "rg-aks" \
 --cluster-name "pod-identity-aks" --namespace default \
 --name csi-to-key-vault \
---identity-resource-id "/subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/rg-utu-aks-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault"
+--identity-resource-id "/subscriptions/302929bf-b0ca-4518-9e93-936b536d692b/resourceGroups/rg-genocs-aks-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/csi-to-key-vault"
 ```
 
 Use following command to encode a value as base64.

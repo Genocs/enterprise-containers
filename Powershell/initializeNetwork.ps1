@@ -8,29 +8,16 @@ Param(
     [parameter(Mandatory = $false)]
     [string]$clusterName = "aks-genocs",
     [parameter(Mandatory = $false)]
-    [string]$acrRegistryName = "genocscontainer",
-    [parameter(Mandatory = $false)]
     [string]$agicPublicIpName = "agic-pip",
     [parameter(Mandatory = $false)]
     [string]$agicName = "agic-genocs",
     [parameter(Mandatory = $false)]
     [string]$agicVnetName = "agic-vnet",
     [parameter(Mandatory = $false)]
-    [string]$agicSubnetName = "agic-subnet"    
-
-
+    [string]$agicSubnetName = "agic-subnet"
 )
 
-# Login to Azure
-#az login
 
-
-# Login to azure container registry
-#az acr login --name $acrRegistryName
-
-
-# List the resources
-#az acr list --resource-group $resourceGroupName --query "[].{acrLoginServer:loginServer}" --output table
 
 
 ## Setup the networking

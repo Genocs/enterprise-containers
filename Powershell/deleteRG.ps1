@@ -39,7 +39,7 @@ if ($rgExists -eq $true) {
 }
 
 # 3. Delete resource group if it exist
-$nodeResourceGroup=$(az aks show -g $aksResourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
+$nodeResourceGroup = $(az aks show -g $aksResourceGroupName -n $clusterName -o tsv --query "nodeResourceGroup")
 $rgExists = az group exists --name $nodeResourceGroup
 Write-Host "$nodeResourceGroup exists: $rgExists" -ForegroundColor Red
 
