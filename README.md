@@ -1,5 +1,11 @@
 # Enterprise Kubernetes Cluster Setup
 
+[![GitHub](https://img.shields.io/github/license/Genocs/genocs-library?color=2da44e&style=flat-square)](https://github.com/Genocs/enterprice-containers/blob/main/LICENSE)
+[![Discord](https://img.shields.io/discord/1106846706512953385?color=%237289da&label=Discord&logo=discord&logoColor=%237289da&style=flat-square)](https://discord.com/invite/fWwArnkV)
+[![Twitter](https://img.shields.io/twitter/follow/genocs?color=1DA1F2&label=Twitter&logo=Twitter&style=flat-square)](https://twitter.com/genocs)
+
+---
+
 ![Azure-KEDA](/images/Azure-KEDA.drawio.svg)
 
 Setup Kubernetes cluster to be production ready isn't a simple task. It requires to take in consideration many topics.
@@ -21,28 +27,28 @@ This proposal is thought as to be used on Azure, even though most of the options
 
 The setup process can be spitted into different steps:
 
-- Bare setup
+- Bare components
 - Security
 - Scaling
 - Monitoring
 - Application
 
-# Setup - Overview
+## Setup - Overview
 
 During this step we are going to setup Kubernetes cluster tackling the following components:
 
 - Setup private Docker images repository
 - Setup the Kubernetes cluster
-- Setup the vault for secrets 
+- Setup the vault for secrets
 - Secure secrets
-- Setup network 
+- Setup networking
 - Setup autoscaler
 
 ### Monitoring
 
 The implementation will monitor both infrastructure and application side.
 
-The monitoring will be implemented using different approach. Some are open source, other don't. 
+The monitoring will be implemented using different approach. Some are open source, other don't.
 
 Open-source Components uses in this demo:
 
@@ -50,18 +56,17 @@ Open-source Components uses in this demo:
 - [Jaeger](https://www.jaegertracing.io/)
 - [Promotheus](https://prometheus.io/)
 
-***NOTE:*** 
-The open-source components have the entreprise version. It requires to have active subscription if you plan to use them.  
+**NOTE:** The open-source components have the entreprise version. It requires to have active subscription if you plan to use them.  
 
 ### Security and Networking
 
 Security and Networking context will implement all the components that allows to handle:
-- routing (forward requests to the services throughout a reverse proxy
-- termination (secure APIs calls by SSL or TLS) 
+
+- routing (forward requests to the services throughout a reverse proxy)
+- termination (secure APIs calls by SSL or TLS)
 - throttling
 
-
-The main components are:
+Main components are:
 
 - Public IP
 - Vnet and Subnet
@@ -89,7 +94,6 @@ There are multiple options for scaling Kubernetes and containers in general.
 Here `(KEDA) Kubernetes-based Event Driven Autoscaling` will be used.
 
 RabbitMQ is used as the event source.
-
 
 If you wish to use Kubernetes cluster apart from AKS, you can skip the `Step 2.1` of provisioning the cluster and [install KEDA](https://github.com/kedacore/keda#setup) on your own Kubernetes cluster.
 
@@ -151,8 +155,7 @@ docker-compose -f .\src\docker-compose-dockerhub.yaml build
 docker-compose -f .\src\docker-compose-dockerhub.yaml push
 ```
 
-**NOTE**
-Please update the yaml files with the correct image version before use them.
+**NOTE:** Please update the yaml files with the correct image version before use them.
 
 ### [Powershell](Powersehll)
 
@@ -163,7 +166,6 @@ Contains the helper PowerShell scripts to:
 - To deploy the application
 - To delete the application
 - To delete the resource group
-
 
 **NOTE: AKS is expensive to keep alive**
 
@@ -187,7 +189,7 @@ The Skaffold and Kaniko Kubernetes cluster setup.
 
 This allows to setup Kubernetes cluster on Google Cloud.
 
-# Setup - Details
+## Setup - Details
 
 1. Install Azure Container Registry
 2. Install Kubernetes Cluster
@@ -201,7 +203,7 @@ This allows to setup Kubernetes cluster on Google Cloud.
 
 ### 2.1 Initialize ACR
 
-The **ACR** (Azure Container Registry) allows to store Docker images inside a private repositoy 
+The **ACR** (Azure Container Registry) allows to store Docker images inside a private repositoy.
 
 Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with default values from root directory.
 
@@ -219,7 +221,14 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 
 ### 2.3 Initialize AKV
 
-The **AKV** Azure Key Vault is used to store every secret used by the application in a safe place. Secret data are: connection string, API Key and so on.
+The **AKV** Azure Key Vault is used to store every secret used by the application in a safe place.
+
+Secret data are:
+
+- connection strings
+- API Key
+- certificates
+- public/private keys
 
 Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with default values from root directory.
 
@@ -230,9 +239,10 @@ Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with defaul
 ### 2.4 Setup Network Infrastrutture
 
 The **AKS** will use a network infrastructure composed by:
+
 - Public IP
 - VNET
-- AGIC
+- AGIC (Application Gateway Ingress Controller)
 
 The Poweshell script will *'Create peering beetween AGIC and AKS and viceversa'* as well.
 
@@ -276,7 +286,7 @@ kubectl get all -n keda
 
 ### 2.8 Deploy Demo Application
 
-Deploy Producers Internal Service & Consumers.
+Deploy Producers, Internal Service and Consumers.
 
 Execute the powershell script.
 
@@ -294,7 +304,7 @@ cd Powershell
 cd ..
 ```
 
-The `deployApplications-AKS` powershell script deploys the RabbitMQConsumer and RabbitMQProducer in the correct order. 
+The `deployApplications-AKS` powershell script deploys the RabbitMQConsumer and RabbitMQProducer in the correct order.
 
 Alternately, all the components can also be deployed directly using the `kubectl` apply command recursively on the k8s directory as shown below:
 
@@ -313,9 +323,7 @@ cd Powershell
 cd ..
 ```
 
-**Note**
-
-The default options can be overwritten by passing arguments to the initializeAKS script. In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
+**Note:** The default options can be overwritten by passing arguments to the initializeAKS script. In the below example, we are overriding the number of nodes in the AKS cluster to 4 instead of 3 and resource group name as `kedaresgrp`.
 
 ``` PS
 .\Powershell\initilaizeAKS `
@@ -356,9 +364,7 @@ As we can see above, RabbitMQ service is available within the Kubernetes cluster
 
 Also note the public `LoadBalancer` IP for the Producer Service. In this case the IP is **`52.139.237.252`**.
 
-**Note:**
-
-This IP will be different when the services are redeployed on a different Kubernetes cluster.
+**Note:** This IP will be different when the services are redeployed on a different Kubernetes cluster.
 
 ### 2.11 Watch for deployments
 
@@ -373,12 +379,11 @@ kubectl get deploy -w
 
 Initially there is 1 instance of rabbitmq-consumer and 2 replicas of the rabbitmq-producer (Producer) deployed in the cluster.
 
-
 ### 2.12 Browse RabbitMQ Management UI
 
 RabbitMQ Management UI is enabled by port forwarding.
 
-In order to do this, open a bash shell and run the command. 
+In order to do this, open a bash shell and run the command.
 
 Please keep the shell open to keep open the port forwarding.
 
@@ -387,15 +392,16 @@ kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
 Open the web browser:
-http://localhost:15672/
+[rabbitmq](http://localhost:15672/)
 
-Login to the management UI using credentials as `user` and `PASSWORD`. 
+Login to the management UI using credentials as `user` and `PASSWORD`.
 
 Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
 
 ### 2.13 Generate load using `Visual Studio code Extension`
 
 TBV
+
 ### 2.14 Generate load using `Postman`
 
 I am using [Postman](https://www.getpostman.com/) to submit a POST request to the API which generates 2000 messages onto a RabbitMQ queue named `hello`. You can use any other command line tool like CURL to submit a GET request.
@@ -437,8 +443,8 @@ List Custom Resource Definition
 ``` bash
 kubectl get crd
 ```
-![autoscaled down consumers](/images/KEDA-CRD.PNG)
 
+![autoscaled down consumers](/images/KEDA-CRD.PNG)
 
 As part of the KEDA installation, ScaledObject and TriggerAuthentications are deployed on the Kubernetes cluster.
 
@@ -448,11 +454,10 @@ As part of the KEDA installation, ScaledObject and TriggerAuthentications are de
 .\Powershell\deleteRG.ps1
 ```
 
----
+## Resource Groups
 
-# Resource Groups
+This demo will create all the Azure Resource inside:
 
-This demo will create all the Azure Resource inside:  
 - rg-aks-genocs
 - rg-agic-genocs
 - MC_rg-aks-genocs_aks-genocs_westeurope
@@ -463,6 +468,7 @@ This demo will create all the Azure Resource inside:
 - aks-genocs - Kubernetes service
 - genocscontainer - Container registry
 - kv-genocsakst - Key vault
+
 ## 2. rg-agic-genocs
 
 - agic-genocs - Application gateway
@@ -483,19 +489,46 @@ This demo will create all the Azure Resource inside:
 
 ## 4. DefaultResourceGroup-WEU
 
----
+## Community
 
+- Discord [@genocs](https://discord.com/invite/fWwArnkV)
+- Facebook Page [@genocs](https://facebook.com/Genocs)
+- Youtube Channel [@genocs](https://youtube.com/c/genocs)
 
-# Acknowledgements
+## Contributors
+
+Submit your PR and join the list!
+
+<a href="https://github.com/Genocs/enterprise-containers/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Genocs/enterprise-containers" />
+</a>
+
+## License
+
+This project is licensed with the [MIT license](LICENSE).
+
+## Support :star:
+
+Has this project helped you learn something New? or Helped you at work?
+Here are a few ways by which you can support.
+
+- Leave a star! :star:
+- Recommend this awesome project to your colleagues. 🥇
+- Do consider endorsing me on LinkedIn for ASP.NET Core - [Connect via LinkedIn](https://www.linkedin.com/in/giovanni-emanuele-nocco-b31a5169/) 🦸
+- Or, If you want to support this project in the long run, [consider buying me a coffee](https://www.buymeacoffee.com/genocs)! ☕
+
+<br>
+<a href="https://www.buymeacoffee.com/genocs"><img width="250" alt="black-button" src="https://user-images.githubusercontent.com/31455818/138557309-27587d91-7b82-4cab-96bb-90f4f4e600f1.png" ></a>
+
+## Acknowledgements
 
 A lot of people inspired me and provided unevaluable amount of information:
 
 Here some of them:
+
 - [NileshGule](https://github.com/NileshGule/)
 - [DevMentors](https://github.com/devmentors/)
 
-
-
-# References
+## References
 
 - [Hands-on-Kubernetes-on-Azure-Third-Edition](https://github.com/PacktPublishing/Hands-on-Kubernetes-on-Azure-Third-Edition)

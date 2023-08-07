@@ -34,4 +34,3 @@ wt -w 0 new-tab --title grafana -p "PowerShell Core" kubectl port-forward --name
 
 # Open new tab for watchers
 wt -w 0 new-tab --title watchers -p "PowerShell Core" split-pane -V kgpow; split-pane -V -p "PowerShell Core" kgdepw
-

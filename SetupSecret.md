@@ -17,7 +17,7 @@ kubectl apply -f .\k8s\Security\secret-file.yaml
 
 # Check the secrets
 kubectl get secrets
-``` 
+```
 
 ## 2. Secret literal
 The following procedure allow setup secret as literal
@@ -51,7 +51,7 @@ kubectl apply secret-file.yaml
 
 # File - Setup at pod level 
 kubectl apply pod-file.yaml
-``` 
+```
 
 ## 2. Secret from AKV
 
@@ -70,6 +70,4 @@ kubectl apply -f .\k8s\AKV\SecretProviderClass.yaml
 
 # setup the deployment
 kubectl apply -f .\k8s\ApplicationConsumer\deployment-akv.yaml
-``` 
-
-
+```
