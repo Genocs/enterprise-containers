@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: demo-app-worker
+  namespace: utu-taxfree
+  labels:
+    app: demo-app-worker
+    run: demo-app-worker
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: demo-app-worker
+
+  template:
+    metadata:
+      labels:
+        app: demo-app-worker
+        run: demo-app-worker
+
+    spec: 
+      containers:
+        - name: demo-app-worker
+          image: genocs turegistry.azurecr.io/demoapp.worker
+          env:
+            - name: DOTNET_ENVIRONMENT
+              value: "Local"
+          resources:
+            requests:
+              cpu: "100m" #10% of a core
+              memory: "100Mi"
+            limits:
+              cpu: "100m" #10% of a core
+              memory: "100Mi"
+          imagePullPolicy: Always
+
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst

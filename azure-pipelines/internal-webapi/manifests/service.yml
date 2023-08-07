@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: promotion-engine-service
+  namespace: utu-taxfree
+  labels:
+    run: promotion-engine-webapi
+
+spec:
+  type: ClusterIP
+
+  ports:
+    - protocol: TCP
+      name: http-port
+      port: 80
+      targetPort: 80
+
+  selector:
+    run: promotion-engine-webapi

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: demo-external-service
+  namespace: utu-taxfree
+  labels:
+    run: demo-external-webapi
+
+spec:
+  type: ClusterIP
+
+  ports:
+    - protocol: TCP
+      name: http-port
+      port: 80
+      targetPort: 80
+
+  selector:
+    run: demo-external-webapi
