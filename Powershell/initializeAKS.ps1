@@ -69,10 +69,10 @@ if ($aksCounts -eq 0) {
     # --aks-custom-headers="CustomizedUbuntu=aks-ubuntu-1804,ContainerRuntime=containerd" `
 
     # Enable pod Identity as standalone command
-    # az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
+    #az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
 
     # Attach Azure Container Registry to the Kubernetes cluster
-    # az aks update -g $resourceGroupName -n $clusterName --attach-acr $acrRegistryName
+    #az aks update -g $resourceGroupName -n $clusterName --attach-acr $acrRegistryName
 
     #check the status of last command
     if (!$?) {

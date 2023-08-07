@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: ConfigMap
+
+metadata:
+  name: demo-configmap
+  namespace: genocs-demo
+
+data:
+  KEY_01: key_01
+  KEY_02: key_02
+  KEY_03: key_03
+  KEY_04: key_04

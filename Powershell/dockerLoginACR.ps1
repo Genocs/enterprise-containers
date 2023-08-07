@@ -18,7 +18,7 @@ $regFullName = az acr show `
     --query "loginServer"
 
 Write-Host "Logging in to ACR registry" -ForegroundColor Cyan
-docker login  $regFullName `
+docker login $regFullName `
     --username $acrUserName `
     --password $acrUserPassword
 

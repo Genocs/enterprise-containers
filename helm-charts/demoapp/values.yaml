@@ -1,4 +1,4 @@
-# Default values for techtalks.
+# Default values for demoapp.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,6 +7,9 @@ replicaCount: 1
 image:
   repository: nginx
   pullPolicy: IfNotPresent
+  # IfNotPresent
+  # Always
+  # Latest
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -69,6 +72,12 @@ resources:
   #   cpu: 100m
   #   memory: 128Mi
 
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -76,16 +85,9 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
 
-tolerations: []
+externalproducer:
+  containerPort: 80
 
-affinity: {}
-
-rabbitmq:
-  hostname: "rabbitmq"
-  username: "user"
-  password: "PASSWORD"
-
-techtalksproducer:
+internalproducer:
   containerPort: 80
