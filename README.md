@@ -60,6 +60,8 @@ Open-source Components uses in this demo:
 
 ### Security and Networking
 
+<img src="./images/k8s-architecture.png" />
+
 Security and Networking context will implement all the components that allows to handle:
 
 - routing (forward requests to the services throughout a reverse proxy)
@@ -105,16 +107,16 @@ Similarly, if you do not wish to execute the PowerShell scripts, you can execute
 
 Contains the docker compose files to install a bunch of enterprise level tools.
 
-Please refer to this [README](/docker-compose/README.md) for details.
+Please refer to this [README](./docker-compose/README.md) for details.
 
 ### [docs](docs)
 
 Contains some useful documentation like:
 
-- [aks-preview](aks-preview.md)
-- [azure-developer-community](azure-developer-community.md)
-- [minikube-wsl2](minikube-wsl2.md)
-- [monitoring-and-observability](monitoring-and-observability.md)
+- [aks-preview](./docs/aks-preview.md)
+- [azure-developer-community](./docs/azure-developer-community.md)
+- [minikube-wsl2](./docs/minikube-wsl2.md)
+- [monitoring-and-observability](./docs/monitoring-and-observability.md)
 
 ### [src](src)
 
@@ -136,14 +138,14 @@ Both the Producer and Consumer uses the common data model.
 
 In order to build these using Dockerfile:
 
-- [Genocs.KubernetesCourse.WebApi](/src/Genocs.KubernetesCourse.WebApi.dockerfile)
-- [Genocs.KubernetesCourse.Internal.WebApi](/src/Genocs.KubernetesCourse.Internal.WebApi.dockerfile)
-- [Genocs.KubernetesCourse.Worker](/src/Genocs.KubernetesCourse.Worker.dockerfile)
+- [Genocs.KubernetesCourse.WebApi](./src/Genocs.KubernetesCourse.WebApi.dockerfile)
+- [Genocs.KubernetesCourse.Internal.WebApi](./src/Genocs.KubernetesCourse.Internal.WebApi.dockerfile)
+- [Genocs.KubernetesCourse.Worker](./src/Genocs.KubernetesCourse.Worker.dockerfile)
 
 You can build them and they are ready to be pushed to:
 
-- Azure Container Registry [docker-compose ACR](/src/docker-compose-acr.yaml)
-- DockerHub [docker-compose Dockerhub](/src/docker-compose-dockerhub.yaml)
+- Azure Container Registry [docker-compose ACR](./src/docker-compose-acr.yaml)
+- DockerHub [docker-compose Dockerhub](./src/docker-compose-dockerhub.yaml)
 
 The docker images can be built and push to dockerhub using the following commands:
 
@@ -394,7 +396,7 @@ kubectl port-forward svc/rabbitmq 15672:15672
 Open the web browser:
 [rabbitmq](http://localhost:15672/)
 
-Login to the management UI using credentials as `user` and `PASSWORD`.
+Login to the management UI using credentials as `guest` and `guest`.
 
 Remember that these were set during the installation of RabbitMQ services using Helm. If you are using any other user, please update the username and password accordingly.
 
@@ -518,7 +520,7 @@ Here are a few ways by which you can support.
 - Or, If you want to support this project in the long run, [consider buying me a coffee](https://www.buymeacoffee.com/genocs)! ☕
 
 <br>
-<a href="https://www.buymeacoffee.com/genocs"><img width="250" alt="black-button" src="https://user-images.githubusercontent.com/31455818/138557309-27587d91-7b82-4cab-96bb-90f4f4e600f1.png" ></a>
+<a href="https://www.buymeacoffee.com/genocs"><img width="250" alt="black-button" src="https://user-images.githubusercontent.com/31455818/138557309-27587d91-7b82-4cab-96bb-90f4f4e600f1.png"></a>
 
 ## Acknowledgements
 

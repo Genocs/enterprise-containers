@@ -9,8 +9,8 @@ Write-Host "Starting deployment of RabbitMQ on AKS cluster using Helm" -Foregrou
 helm upgrade --install rabbitmq `
     bitnami/rabbitmq `
     --version 12.0.8 `
-    --set auth.username=user `
-    --set auth.password=PASSWORD `
+    --set auth.username=guest `
+    --set auth.password=guest `
     --set auth.erlangCookie=c2VjcmV0Y29va2ll `
     --set metrics.enabled=true
     

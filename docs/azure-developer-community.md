@@ -16,7 +16,7 @@ Run the [deployAll](\Powershell\deployAll.ps1) Powershell script which setup eve
 kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
-Access the RabbitMQ UI with credential `user` & `PASSWORD`
+Access the RabbitMQ UI with credential `guest` & `guest`
 
 http://127.0.0.1:15672
 
