@@ -8,9 +8,9 @@ Write-Host "Starting deployment of RabbitMQ on AKS cluster using Helm" -Foregrou
 
 helm upgrade --install rabbitmq `
     bitnami/rabbitmq `
-    --version 10.1.9 `
-    --set auth.username=user `
-    --set auth.password=PASSWORD `
+    --version 12.0.8 `
+    --set auth.username=guest `
+    --set auth.password=guest `
     --set auth.erlangCookie=c2VjcmV0Y29va2ll `
     --set metrics.enabled=true
     
@@ -21,3 +21,9 @@ Write-Host "Deployment of RabbitMQ using Helm completed successfully" -Foregroun
 
 # Refer to the rabbitmq helm chart documentation for parameters and more details
 # https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq/#installing-the-chart
+
+# To access the MongoDB service from outside the cluster, you need to expose the service using a LoadBalancer
+kubectl patch svc/rabbitmq -p '{"spec":{"type":"LoadBalancer"}}'
+
+# kubectl patch svc genocsdemo.genocs-demo-service -p '{"spec":{"type":"LoadBalancer"}}'
+# kubectl patch svc --namespace genocsdemo genocs-demo-service -p '{"spec":{"type":"LoadBalancer"}}'

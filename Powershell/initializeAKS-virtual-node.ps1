@@ -38,9 +38,9 @@ Write-Host "Creating Virtual Network"
 az network vnet create `
     --resource-group $resourceGroupName `
     --name kedaVnet `
-    --address-prefixes 10.0.0.0/8 `
+    --address-prefixes 10.0.0.0/16 `
     --subnet-name kedaAKSSubnet `
-    --subnet-prefix 10.240.0.0/16 `
+    --subnet-prefix 10.0.1.0/24 `
     --output=jsonc
 
 # Create subnet for Virtual Node
@@ -49,7 +49,7 @@ az network vnet subnet create `
     --resource-group $resourceGroupName `
     --vnet-name kedaVnet `
     --name kedaVirtualNodeSubnet `
-    --address-prefixes 10.241.0.0/16 `
+    --address-prefixes 10.0.2.0/24 `
     --output=jsonc
 
 # Create Service Principal

@@ -31,7 +31,7 @@ kubectl port-forward --namespace default svc/kibana 5601:5601
 kubectl port-forward --namespace default svc/rabbitmq 15672:15672
 ```
 
-Access the RabbitMQ UI with credential `user` & `PASSWORD`
+Access the RabbitMQ UI with credential `guest` & `guest`
 http://localhost:15672
 
 ## Get IP of Producer service

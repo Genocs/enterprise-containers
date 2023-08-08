@@ -87,11 +87,13 @@ az keyvault set-policy `
 # This command not needed if you have already enabled pod identity
 #az aks update -g $resourceGroupName -n $clusterName --enable-pod-identity --enable-pod-identity-with-kubenet
 
+# Link the managed identity to the AKS cluster
 az aks pod-identity add `
     --resource-group $resourceGroupName `
-    --cluster-name $clusterName  `
-    --namespace default  `
-    --name csi-to-key-vault  `
+    --cluster-name $clusterName `
+    --namespace default `
+    --name csi-to-key-vault `
     --identity-resource-id $identity.id
 
+# You can verify the identity is created by running the following command: 
 kubectl get azureidentity

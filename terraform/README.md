@@ -87,7 +87,6 @@ variable "ssh_public_key" {
 
 Once the variables are ready, you are ready to go!
 
-
 ``` bash
 # 1. Check what terraform will create for you
 terraform plan

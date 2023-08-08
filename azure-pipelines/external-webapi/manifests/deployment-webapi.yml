@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: demo-external-webapi
+  namespace: demo-app
+  labels:
+    app: demo-external-webapi
+    run: demo-external-webapi
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: demo-external-webapi
+
+  template:
+    metadata:
+      labels:
+        app: demo-external-webapi
+        run: demo-external-webapi
+
+    spec:
+      containers:
+        - name: demo-external-webapi
+          image: genocsregistry.azurecr.io/demo-external.webapi
+          livenessProbe:
+            httpGet:
+              path: /hc
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 10
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+            - name: MassTransitSettings__HostName
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: RABBITMQ_HOST_NAME
+            - name: MassTransitSettings__VirtualHost
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: RABBITMQ_VIRTUAL_HOST
+            - name: MassTransitSettings__UserName
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: RABBITMQ_USER_NAME
+            - name: MassTransitSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: RABBITMQ_PASSWORD
+            - name: JWT__Secret
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: JWT_SECRET
+            - name: DBSettings__HealthConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: HEALTH_CONNECTION_STRING
+            - name: DBSettings__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: MONGODB_CONNECTION_STRING
+            - name: DBSettings__Database
+              value: "UTU-PromotionEngine-Dev"
+            - name: BlobStorageSettings__ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: BLOB_STORAGE_CONNECTION_STRING
+            - name: ApplicationsInsights__InstrumentationKey
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: APPLICATIONINSIGHT_INSTRUMENTATIONKEY
+            - name: APIClientSettings__APIKey
+              valueFrom:
+                secretKeyRef:
+                  name: taxfree-app-secret
+                  key: UTU_API_KEY
+            - name: APIClientSettings__PointsPromotionalPartnerApiUrl
+              value: "https://internal.demo-app.svc.local.cluster"
+
+          resources:
+            requests:
+              cpu: "200m" #20% of a core
+              memory: "200Mi"
+            limits:
+              cpu: "200m" #20% of a core
+              memory: "200Mi"
+          imagePullPolicy: Always
+
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst

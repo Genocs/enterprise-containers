@@ -13,12 +13,12 @@ az keyvault secret set `
 az keyvault secret set `
     --vault-name $akvName `
     --name "RABBITMQ-USER-NAME" `
-    --value "user"
+    --value "guest"
 
 az keyvault secret set `
     --vault-name $akvName `
     --name "RABBITMQ-PASSWORD" `
-    --value "PASSWORD"
+    --value "guest"
 
 az keyvault secret set `
     --vault-name $akvName `

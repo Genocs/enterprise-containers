@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  bridge8583:
+    image: genocs/bridge8583:1.1.1
+    hostname: bridge8583
+    container_name: bridge8583
+    environment:
+      - INCOMING_URL=bridge8583:9090
+      - REDIS_CONNECTION_STRING=redis:6379
+      - RABBITMQ_CONNECTION_STRING=amqp://guest:guest@rabbitmq:5672/
+      - RABBITMQ_SEND_QUEUE=bridge-send
+    expose:
+      - 9090
+    networks:
+      - genocs
+    volumes:
+      - bridge8583:/var/lib/bridge8583
+
+  heartbeat8583:
+    image: genocs/heartbeat8583:1.1.1
+    hostname: heartbeat8583
+    container_name: heartbeat8583
+    depends_on:
+      - "bridge8583"
+    environment:
+      - OUTCOMING_URL=bridge8583:9090
+      - DELAY=1
+    networks:
+      - genocs
+    volumes:
+      - heartbeat8583:/var/lib/heartbeat8583
+
+  transaction8583:
+    image: genocs/transactions8583:1.0.0
+    hostname: transaction8583
+    container_name: transaction8583
+    depends_on:
+      - "bridge8583"
+    environment:
+      - RABBITMQ_HOST_NAME=rabbitmq
+
+    networks:
+      - genocs
+    volumes:
+      - transaction8583:/var/lib/transaction8583
+
+networks:
+  genocs:
+    name: genocs-network
+    external: true
+
+volumes:
+  bridge8583:
+    driver: local
+
+  heartbeat8583:
+    driver: local
+
+  transaction8583:
+    driver: local

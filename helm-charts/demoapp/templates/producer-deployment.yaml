@@ -2,35 +2,38 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: rabbitmq-producer-deployment
+  name: demo-external-producer  
   labels:
-    run: rabbitmq-producer
+    run: demo-external-producer
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      run: rabbitmq-producer
+      run: demo-external-producer
 
   template:
     metadata:
       labels:
-        run: rabbitmq-producer
+        run: demo-external-producer
     spec:
       containers:
         - name: rabbitmqproducer
           image: genocs/rabbitmqproducer:1.0
           env:
-            # - name: ASPNETCORE_URLS
-            #   value: http://0.0.0.0:8080
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
             - name: RABBITMQ_HOST_NAME
               value: "{{ .Values.rabbitmq.hostname}}"
+            - name: RABBITMQ_VIRTUAL_HOST
+              value: "{{ .Values.rabbitmq.virtualhost}}"
             - name: RABBITMQ_USER_NAME
               value: "{{ .Values.rabbitmq.username}}"
             - name: RABBITMQ_PASSWORD
               value: "{{ .Values.rabbitmq.password}}"
+            - name: ApiClients__InternalApi
+              value: "http://demo-internal-producer-service"              
           ports:
-            # - containerPort: 8080
             - containerPort: {{ .Values.rabbitmqproducer.containerPort }}
               protocol: TCP
           resources:

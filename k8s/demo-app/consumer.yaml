@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: demo-consumer
+  namespace: genocs-demo
+
+  labels:
+    app: demo-consumer
+    run: demo-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: demo-consumer
+
+  template:
+    metadata:
+      labels:
+        app: demo-consumer
+        run: demo-consumer
+    spec:
+      containers:
+        - name: demo-consumer
+          image: genocs/demo-consumer:1.0.0
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+            - name: RABBITMQ_HOST_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-secret
+                  key: RABBITMQ_HOST_NAME
+            - name: RABBITMQ_VIRTUAL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-secret
+                  key: RABBITMQ_VIRTUAL_HOST
+            - name: RABBITMQ_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-secret
+                  key: RABBITMQ_USER_NAME
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-secret
+                  key: RABBITMQ_PASSWORD
+            - name: RABBITMQ_BATCH_SIZE
+              value: "50"
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "20m" #2% of a core
+              memory: "20Mi"
+            limits:
+              cpu: "50m" #5% of a core
+              memory: "50Mi"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst

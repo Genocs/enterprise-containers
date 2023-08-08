@@ -1,0 +1,213 @@
+version: "3.9"
+
+services:
+  # The ISO8583 bridge
+  bridge8583:
+    image: genocs/bridge8583:1.4.0
+    hostname: bridge8583
+    container_name: bridge8583
+    environment:
+      - INCOMING_URL=bridge8583:9090
+      - REDIS_CONNECTION_STRING=redis:6379
+      - RABBITMQ_CONNECTION_STRING=${RABBITMQ_CONNECTION_STRING}
+      - RABBITMQ_SEND_QUEUE=bridge-send
+    restart: on-failure
+    expose:
+      - 9090
+    networks:
+      - genocs
+    volumes:
+      - bridge8583:/var/lib/bridge8583
+
+  # The ISO8583 heartbeat
+  heartbeat8583:
+    image: genocs/heartbeat8583:1.4.0
+    hostname: heartbeat8583
+    container_name: heartbeat8583
+    environment:
+      - OUTCOMING_URL=bridge8583:9090
+      - DELAY=60
+    depends_on:
+      - bridge8583
+    restart: on-failure
+    networks:
+      - genocs
+    volumes:
+      - heartbeat8583:/var/lib/heartbeat8583
+
+  # The ISO8583 transaction receiver
+  transaction8583:
+    image: genocs/transaction8583:2.0.1
+    hostname: transaction8583
+    container_name: transaction8583
+    environment:
+      - ConnectionStrings__ApplicationInsights=${AZURE_APPLICATION_INSIGHTS}
+      - ConnectionStrings__RedisCache=redis:6379
+      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
+      - RabbitMQ__Username=${RABBITMQ_USERNAME}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VIRTUALHOST}
+      - RabbitMQ__Port=5672
+      - MongoDb__ConnectionString=${MONGODB_CONNECTIONSTRING}
+      - OpenTelemetry__AgentHost=jaeger
+      - Monitoring__Jaeger=jaeger
+    depends_on:
+      - bridge8583
+    restart: on-failure
+    networks:
+      - genocs
+    volumes:
+      - transaction8583:/var/lib/transaction8583
+
+  # The this service contains integration with Azure ML and others support services
+  formrecognizer:
+    image: genocs/formrecognizer-webapi:4.0.0
+    hostname: formrecognizer
+    container_name: formrecognizer
+    environment:
+      - AppSettings__PassportModel=https://genocsstorage.blob.core.windows.net/models/KYC_MLModel.mlnet?sp=r&st=2023-02-07T12:49:13Z&se=2024-07-02T19:49:13Z&spr=https&sv=2021-06-08&sr=b&sig=AUG7fdq2KMR4hFuz29USpZhyVXw%2B9NRyVlkkN4onfw8%3D
+      - ConnectionStrings__ApplicationInsights=${AZURE_APPLICATION_INSIGHTS}
+      - AzureCognitiveServices__Endpoint=${AZURE_COGNITIVE_SERVICES_ENDPOINT}
+      - AzureCognitiveServices__SubscriptionKey=${SUBSCRIPTION_KEY}
+      - AzureStorage__AccountKey=tELnVbhEcMbz0vF7K4i8+Et5LYef1H6eyG7tBj+EjcQg8O/kP9QkxqPBvWa54LuZ2gEBIMRSm2KZJK+gP9u9Dw==
+      - AzureStorage__AccountName=genocsstorage
+      - AzureStorage__UploadContainer=facecomparison
+      - ImageClassifier__Endpoint=${AZURE_COGNITIVE_SERVICES_ENDPOINT}
+      - ImageClassifier__PredictionKey=${SUBSCRIPTION_KEY}
+      - ImageClassifier__ModelId=83db127e-d786-4662-8f11-4dce83da21a5
+      - FormRecognizer__Endpoint=${AZURE_COGNITIVE_SERVICES_ENDPOINT}
+      - FormRecognizer__SubscriptionKey=${SUBSCRIPTION_KEY}
+      - Redis__ConnectionString=redis:6379
+      - ConnectionStrings__RedisCache=redis:6379
+      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
+      - RabbitMQ__Username=${RABBITMQ_USERNAME}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VIRTUALHOST}
+      - Monitoring__Jaeger=jaeger
+    ports:
+      - 5200:80
+      - 5201:443
+    networks:
+      - genocs
+    volumes:
+      - formrecognizer-webapi:/var/lib/formrecognizerwebapi
+
+  # The Web API for the transaction hub
+  fiscanner-webapi:
+    image: genocs/fiscanner-webapi:2.2.1
+    hostname: fiscanner-webapi
+    container_name: fiscanner-webapi
+    environment:
+      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
+      - RabbitMQ__Username=${RABBITMQ_USERNAME}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VIRTUALHOST}
+      - RabbitMQ__Port=5672
+      - MongoDb__ConnectionString=${MONGODB_CONNECTIONSTRING}
+      - ConnectionStrings__ApplicationInsights=${AZURE_APPLICATION_INSIGHTS}
+      - ConnectionStrings__BlobStorage=${AZURE_BLOB_STORAGE}
+      - Monitoring__Jaeger=jaeger
+    ports:
+      - 5300:80
+      - 5301:443
+    networks:
+      - genocs
+    volumes:
+      - fiscanner-webapi:/var/lib/fiscannerwebapi
+
+  # The Worker for the transaction hub
+  fiscanner-worker:
+    image: genocs/fiscanner-worker:2.2.1
+    hostname: fiscanner-worker
+    container_name: fiscanner-worker
+    environment:
+      - Monitoring__Jaeger=jaeger
+    networks:
+      - genocs
+    volumes:
+      - fiscanner-worker:/var/lib/fiscannerworker
+
+  # The Web API for the transaction hub
+  telegram-webapi:
+    image: genocs/telegram_integration-webapi:2.1.0
+    hostname: telegram-webapi
+    container_name: telegram-webapi
+    environment:
+      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
+      - RabbitMQ__Username=${RABBITMQ_USERNAME}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VIRTUALHOST}
+      - RabbitMQ__Port=5672
+      - MongoDb__ConnectionString=${MONGODB_CONNECTIONSTRING}
+      - ConnectionStrings__ApplicationInsights=${AZURE_APPLICATION_INSIGHTS}
+      - ConnectionStrings__BlobStorage=${AZURE_BLOB_STORAGE}
+      - Monitoring__Jaeger=jaeger
+    ports:
+      - 5310:80
+      - 5311:443
+    networks:
+      - genocs
+    volumes:
+      - telegram-webapi:/var/lib/telegramwebapi
+
+  # The Worker for the transaction hub
+  telegram-worker:
+    image: genocs/telegram_integration-worker:2.1.0
+    hostname: telegram-worker
+    container_name: telegram-worker
+    environment:
+      - RabbitMQ__HostName=${RABBITMQ_HOSTNAME}
+      - RabbitMQ__Username=${RABBITMQ_USERNAME}
+      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
+      - RabbitMQ__VirtualHost=${RABBITMQ_VIRTUALHOST}
+      - RabbitMQ__Port=5672
+      - MongoDb__ConnectionString=${MONGODB_CONNECTIONSTRING}
+      - ConnectionStrings__ApplicationInsights=${AZURE_APPLICATION_INSIGHTS}
+      - TelegramSettings__Token=${TELEGRAM_TOKEN}
+      - OpenAISettings__APIKey=${OPENAI_APIKEY}
+      - OpenAISettings__Url=https://api.openai.com/v1/completions
+      - Monitoring__Jaeger=jaeger
+    networks:
+      - genocs
+    volumes:
+      - telegram-worker:/var/lib/telegramworker
+
+  # The Front-end for the transaction hub
+  fiscanner-webportal:
+    image: genocs/fiscanner-webportal-l:2.1.0
+    hostname: fiscanner-webportal
+    container_name: fiscanner-webportal
+    depends_on:
+      - fiscanner-webapi
+    restart: on-failure
+    ports:
+      - 4500:80
+    networks:
+      - genocs
+    volumes:
+      - fiscanner-webportal:/var/lib/fiscannerwebportal
+
+networks:
+  genocs:
+    name: genocs-network
+    external: true
+
+volumes:
+  bridge8583:
+    driver: local
+  heartbeat8583:
+    driver: local
+  transaction8583:
+    driver: local
+  formrecognizer-webapi:
+    driver: local
+  fiscanner-webapi:
+    driver: local
+  fiscanner-worker:
+    driver: local
+  telegram-webapi:
+    driver: local
+  telegram-worker:
+    driver: local
+  fiscanner-webportal:
+    driver: local

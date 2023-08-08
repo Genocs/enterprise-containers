@@ -34,7 +34,11 @@ az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/U
 az provider register --namespace Microsoft.ContainerService
 ```
 
-## Use `containerd` as container runtime when cluster is created
+## Containerd
+
+### How to use `containerd` as container runtime when cluster is created
+
+Containerd is another container runtime that can be used with AKS. It is a lightweight, high-performance container runtime that provides a native developer experience for building, shipping, and running containerized applications. It is available as a preview feature in AKS.
 
 Add the following lines to the cluster creation command
 

@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    hostname: mongo_node_1
+    container_name: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - genocs
+    volumes:
+      - mongo:/var/lib/data/db
+
+  rabbitmq:
+    image: masstransit/rabbitmq:latest
+    hostname: rabbit_node_1
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15692:15692
+    networks:
+      - genocs
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  redis:
+    image: redis
+    hostname: redis_node_1
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - genocs
+    volumes:
+      - redis:/var/lib/data/db
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    hostname: jaeger_node_1
+    container_name: jaeger
+    ports:
+      - 5775:5775/udp
+      - 5778:5778
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 9411:9411
+      - 14268:14268
+      - 16686:16686
+    networks:
+      - genocs
+    volumes:
+      - jaeger:/var/lib/jaeger
+
+networks:
+  genocs:
+    name: genocs-network
+
+volumes:
+  mongo:
+    driver: local
+  rabbitmq:
+    driver: local
+  redis:
+    driver: local
+  jaeger:
+    driver: local

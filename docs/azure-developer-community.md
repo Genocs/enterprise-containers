@@ -1,6 +1,6 @@
 # Autoscale Containers With Event Driven Workloads
 
-Setup for scaling .Net containers with event driven workloads
+Setup for scaling .NET containers with event driven workloads.
 
 ## Initialize AKS cluster with all KEDA related resources
 
@@ -16,7 +16,7 @@ Run the [deployAll](\Powershell\deployAll.ps1) Powershell script which setup eve
 kubectl port-forward svc/rabbitmq 15672:15672
 ```
 
-Access the RabbitMQ UI with credential `user` & `PASSWORD`
+Access the RabbitMQ UI with credential `guest` & `guest`
 
 http://127.0.0.1:15672
 
@@ -95,8 +95,7 @@ helm list
 helm uninstall nginx-ingress
 ```
 
-
-# Purge Key Vault soft-enable secret
+## Purge Key Vault soft-enable secret
 
 By default, Key Vault has soft-enabled delete option set to true.
 So even though the Key vault resource is deleted the data remain in Azure for 90 days.
@@ -108,6 +107,6 @@ Please the the documentation:
 
 [Official](https://docs.microsoft.com/en-us/azure/key-vault/general/key-vault-recovery?tabs=azure-portal)
 
-``` bash
-az keyvault purge --subscription f20b0dac-53ce-44d4-a673-eb1fd36ee03b -n kv-genocsakst
+``` sh
+az keyvault purge --subscription <your subscription id> -n kv-genocsakst
 ```
