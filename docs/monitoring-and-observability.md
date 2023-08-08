@@ -87,6 +87,7 @@ kubectl get crd
 Apply manifest files from the following folder `k8s` folder
 
 ## Setup Service & Pod monitors
+
 For Spring Boot conference app, apply the manifest files from the `k8s/prometheus-config` folder using the command
 
 ``` bash
@@ -107,11 +108,11 @@ Grafana login credentials `admin`, `prom-operator`
 
 ## Import Grafana dashboards
 
-- RabbitMQ : https://grafana.com/grafana/dashboards/10991
-- Springboot : https://grafana.com/grafana/dashboards/11955
-- .Net core : https://grafana.com/grafana/dashboards/13399
-- .Net Core Services : https://grafana.com/grafana/dashboards/12526
-- .Net Core Controller Summary : https://grafana.com/grafana/dashboards/10915
+- [RabbitMQ](https://grafana.com/grafana/dashboards/10991)
+- [Springboot](https://grafana.com/grafana/dashboards/11955)
+- [.Net core](https://grafana.com/grafana/dashboards/13399)
+- [.Net Core Services](https://grafana.com/grafana/dashboards/12526)
+- [.Net Core Controller Summary](https://grafana.com/grafana/dashboards/10915)
 
 ## Access Prometheus Metrics for Spring Boot App
 
@@ -137,7 +138,6 @@ for i in `seq 1 3000`; do curl http://40.119.248.189:8080/api/v1/speakers/; done
 for i in `seq 1 1500`; do curl http://20.44.232.28:8080/api/v1/sessions/; done
 for i in `seq 1 20`; do curl http://20.44.232.28:8080/api/v1/crash/boom; done
 20.44.232.28
-
 ```
 
 ``` PS
@@ -152,13 +152,16 @@ for ($i =0; $i -lt 10; $i++)
 ## All the links used during the demo
 
 ### Github repositories
+
 - [Springboot conference app demo code](https://github.com/NileshGule/spring-boot-conference-app/tree/mssql-server)
 
 ### Slidedecks
+
 - [Slideshare](https:/www.slideshare.net/nileshgule/)
 - [Speakerdeck](https://www.speakerdeck.com/NileshGule/)
 
 ### Other links
+
 - [Azure Singapore sessions](https://bit.ly/AzureSingaporeSessions)
 
 - [CNCF trail](https://github.com/cncf/trailmap)
