@@ -33,7 +33,7 @@ spec:
             - name: RABBITMQ_PASSWORD
               value: "guest"
             - name: ApiClients__InternalApi
-              value: "http://rabbitmq-producer-int-service"              
+              value: "http://rabbitmq-producer-int-service"
           ports:
             - containerPort: 80
               protocol: TCP
