@@ -24,4 +24,3 @@ Write-Host "Installing Application on AKS cluster" -ForegroundColor Cyan
 
 Write-Host "Installing Autoscaler on AKS cluster" -ForegroundColor Cyan
 & ((Split-Path $MyInvocation.InvocationName) + "\deployAutoScaler.ps1")
-

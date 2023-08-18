@@ -191,19 +191,23 @@ The Skaffold and Kaniko Kubernetes cluster setup.
 
 This allows to setup Kubernetes cluster on Google Cloud.
 
-## Setup - Details
+## **SECTION 2 - Setup**
 
-1. Install Azure Container Registry
-2. Install Kubernetes Cluster
-3. Install Azure Key Vault
+1. Install Azure Container Registry ACR
+2. Install Kubernetes Cluster AKS
+3. Install Azure Key Vault AKV
 4. Setup Network Infrastructure
 5. Deploy Azure Key Vault Secret
-6. Deploy RabbitMQ node inside the AKS
-7. Deploy Keda Autoscaler
-8. Deploy Application
-9. Deploy Application AutoScaler
+6. Deploy RabbitMQ node
+7. Deploy MongoDB node
+8. Deploy Prometheus & Grafana
+9. Deploy Jaeger
+10. Deploy KEDA Autoscaler
+11. Deploy Application
+12. Deploy Application AutoScaler
+13. Get list of the resources
 
-### 2.1 Initialize ACR
+### 2.1 Install Azure Container Registry ACR
 
 The **ACR** (Azure Container Registry) allows to store Docker images inside a private repositoy.
 
@@ -213,7 +217,7 @@ Run [initializeACR](/Powershell/initializeACR.ps1) powershell script with defaul
 .\Powershell\initializeACR.ps1
 ```
 
-### 2.2 Initialize AKS cluster
+### 2.2 Install Kubernetes Cluster AKS
 
 Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with default values from root directory.
 
@@ -221,7 +225,7 @@ Run [initializeAKS](/Powershell/initializeAKS.ps1) powershell script with defaul
 .\Powershell\initializeAKS.ps1
 ```
 
-### 2.3 Initialize AKV
+### 2.3 Install Azure Key Vault AKV
 
 The **AKV** Azure Key Vault is used to store every secret used by the application in a safe place.
 
@@ -238,7 +242,7 @@ Run [initializeAKV](/Powershell/initializeAKV.ps1) powershell script with defaul
 .\Powershell\initializeAKV.ps1
 ```
 
-### 2.4 Setup Network Infrastrutture
+### 2.4 Setup Network Infrastructure
 
 The **AKS** will use a network infrastructure composed by:
 
@@ -254,9 +258,11 @@ Run [initializeNetwork](/Powershell/initializeNetwork.ps1) powershell script wit
 .\Powershell\initializeNetwork.ps1
 ```
 
-### 2.5 Deploy AKV Secret
+### 2.5 Deploy Azure Key Vault Secret
 
-This step shows how to setup a script file to initialize some Secret inside AKV
+This step shows how to setup a script file to push Secrets inside AKV.
+
+Run [deployAKV-secrets](/Powershell/deployAKV-secrets.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\deployAKV-secrets.ps1
@@ -266,15 +272,51 @@ This step shows how to setup a script file to initialize some Secret inside AKV
 
 This step shows how to setup a RabbitMQ node inside AKS.
 
-***Please do not use it for Production***.
+***Not reccomanded for Production***
+
+Run [deployRabbitMQ](/Powershell/deployRabbitMQ.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\deployRabbitMQ.ps1
 ```
 
-### 2.7 Deploy KEDA Autoscaler
+### 2.7 Deploy MongoDB node
+
+This step shows how to setup a MongoDb instance inside AKS.
+
+***Not reccomanded for Production***
+
+Run [deployMongoDB](/Powershell/deployMongoDB.ps1) powershell script with default values from root directory.
+
+``` PS
+.\Powershell\deployMongoDB.ps1
+```
+
+### 2.8 Deploy Prometheus & Grafana
+
+This step shows how to setup a Prometheus and Grafana inside AKS.
+
+Run [deployPrometheus](/Powershell/deployPrometheus.ps1) powershell script with default values from root directory.
+
+``` PS
+.\Powershell\deployPrometheus.ps1
+```
+
+### 2.9 Deploy Jaeger
+
+This step shows how to setup a Jaeger distributed Tracing inside AKS.
+
+Run [deployJaeger](/Powershell/deployJaeger.ps1) powershell script with default values from root directory.
+
+``` PS
+.\Powershell\deployJaeger.ps1
+```
+
+### 2.10 Deploy KEDA Autoscaler
 
 This step shall install the KEDA autoscaler inside AKS.
+
+Run [deployKEDA](/Powershell/deployKEDA.ps1) powershell script with default values from root directory.
 
 ``` PS
 .\Powershell\deployKEDA.ps1
@@ -286,14 +328,14 @@ Verify KEDA is installed correctly on the Kubernetes cluster.
 kubectl get all -n keda
 ```
 
-### 2.8 Deploy Demo Application
+### 2.11 Deploy Application
 
-Deploy Producers, Internal Service and Consumers.
+Deploy External WebAPI (Producer), Internal WebAPI and Backgroud Worker Consumer.
 
 Execute the powershell script.
 
 ``` PS
-# Use this to setup the application with Secret coming from file
+# Use this to setup the application with Secret coming from file as Opaque secret
 cd Powershell 
 .\deployApplications-AKS-SecretFile.ps1
 cd ..
@@ -315,7 +357,7 @@ Alternately, all the components can also be deployed directly using the `kubectl
 kubectl apply -R -f .
 ```
 
-### 2.9 Deploy Autoscaler for Application Autoscaler
+### 2.12 Deploy Application AutoScaler
 
 Execute the `deployAutoScaler.ps1` powershell script.
 
@@ -339,13 +381,20 @@ If you do not wish to run the individual PowerShell scripts, you can run one sin
 .\Powershell\deployAll.ps1
 ```
 
-### 2.10 Get list of the resources
+### 2.13 Get list of the resources
 
-We will need to know the service name for RabbitMQ to be able to do port forwarding to the RabbitMQ management UI and also the public IP assigned to the Application producer WebApi which will be used to generate the messages onto RabbitMQ queue.
+ General purpose command to get info about K8S resources
 
 ``` bash
+# General purpose command to get all resources
+# -A to get all namespaces
+# -w to watch for changes
+
 # Get services
 kubectl get svc
+
+# Get secrets
+kubectl get ingress
 
 # Get pod
 kubectl get pod

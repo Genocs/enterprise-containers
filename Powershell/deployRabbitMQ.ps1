@@ -23,7 +23,5 @@ Write-Host "Deployment of RabbitMQ using Helm completed successfully" -Foregroun
 # https://github.com/bitnami/charts/tree/master/bitnami/rabbitmq/#installing-the-chart
 
 # To access the MongoDB service from outside the cluster, you need to expose the service using a LoadBalancer
-kubectl patch svc/rabbitmq -p '{"spec":{"type":"LoadBalancer"}}'
-
-# kubectl patch svc genocsdemo.genocs-demo-service -p '{"spec":{"type":"LoadBalancer"}}'
+# kubectl patch svc/rabbitmq -p '{"spec":{"type":"LoadBalancer"}}'
 # kubectl patch svc --namespace genocsdemo genocs-demo-service -p '{"spec":{"type":"LoadBalancer"}}'

@@ -1,0 +1,140 @@
+name: $(MajorVer).$(MinorVer).$(Build.BuildId)
+
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+# *** Library variables ***
+# DockerAcrConnection
+# DockerAcrName
+# PatNugetsFeed
+
+trigger:
+  - develop
+  - master
+
+resources:
+  - repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: $(DockerAcrConnection)
+  dockerRegistryServiceConnectionStage: $(DockerAcrConnectionStage)
+  imageRepository: "ionic"
+  imageRepositoryStage: "ionicstage"
+  dockerfilePath: "$(Build.SourcesDirectory)/web.dockerfile"
+  tag: "$(Build.BuildId)"
+  imageName: "$(DockerAcrName).azurecr.io/$(imageRepository)"
+  imageNameStage: "$(DockerAcrNameStage).azurecr.io/$(imageRepositoryStage)"
+
+  # Agent VM image name
+  vmImageName: "ubuntu-latest"
+
+stages:
+  - stage: Build
+    displayName: Build and push (Dev/Qa/Test registry)
+    condition: and(always(), contains(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@1
+            displayName: "Build the Docker image"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnection)"
+              command: "Build an image"
+              dockerFile: "$(dockerfilePath)"
+              arguments: "--build-arg BuildId=$(Build.BuildId) --build-arg PAT=$(PatNugetsFeed)"
+              includeLatestTag: true
+              imageName: "$(ImageName)"
+
+          - task: Docker@1
+            displayName: "Push the Docker image to AzureContainerRegistry"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnection)"
+              command: "Push an image"
+              imageName: "$(ImageName)"
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: Docker@1
+            displayName: "Tag-Latest Build the Docker image"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnection)"
+              command: "Build an image"
+              dockerFile: "$(dockerfilePath)"
+              arguments: "--build-arg BuildId=$(Build.BuildId) --build-arg PAT=$(PatNugetsFeed)"
+              imageName: "$(ImageName):$(MajorVer).$(MinorVer).$(Build.BuildId)"
+
+          - task: Docker@1
+            displayName: "Tag-Latest Push the Docker image to AzureContainerRegistry"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnection)"
+              command: "Push an image"
+              imageName: "$(ImageName):$(MajorVer).$(MinorVer).$(Build.BuildId)"
+
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+  - stage: BuildStage
+    displayName: Build and push (Stage registry)
+    condition: and(always(), contains(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@1
+            displayName: "Build the Docker image"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnectionStage)"
+              command: "Build an image"
+              dockerFile: "$(dockerfilePath)"
+              arguments: "--build-arg BuildId=$(Build.BuildId) --build-arg PAT=$(PatNugetsFeed)"
+              includeLatestTag: true
+              imageName: "$(ImageNameStage)"
+
+          - task: Docker@1
+            displayName: "Push the Docker image to AzureContainerRegistry"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnectionStage)"
+              command: "Push an image"
+              imageName: "$(ImageNameStage)"
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: Docker@1
+            displayName: "Tag-Latest Build the Docker image"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnectionStage)"
+              command: "Build an image"
+              dockerFile: "$(dockerfilePath)"
+              arguments: "--build-arg BuildId=$(Build.BuildId) --build-arg PAT=$(PatNugetsFeed)"
+              imageName: "$(ImageNameStage):$(MajorVer).$(MinorVer).$(Build.BuildId)"
+
+          - task: Docker@1
+            displayName: "Tag-Latest Push the Docker image to AzureContainerRegistry"
+            inputs:
+              containerRegistryType: "Container Registry"
+              dockerRegistryEndpoint: "$(dockerRegistryServiceConnectionStage)"
+              command: "Push an image"
+              imageName: "$(ImageNameStage):$(MajorVer).$(MinorVer).$(Build.BuildId)"
+
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+          - task: CopyFiles@2
+            inputs:
+              Contents: "**"
+              TargetFolder: "$(build.artifactstagingdirectory)"
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"

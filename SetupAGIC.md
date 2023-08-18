@@ -22,7 +22,7 @@ Official Documentation:
 
 ----
 
-# AKS Azure Kubernetes Services
+## AKS Azure Kubernetes Services
 
 Setup the Kubernetes Enviroment
 
@@ -39,8 +39,8 @@ az login
 az acr login --name "acr-genocs"
 
 
-# Setup credentials (DEV/QA/TEST)
-az account set --subscription "302929bf-b0ca-4518-9e93-936b536d692b"
+# Setup subscription credentials
+az account set --subscription "<your subscription id>"
 
 
 # Create the resource group
@@ -170,7 +170,7 @@ minikube version
 minikube --help
 ```
 
-Day by day usefull command
+Day by day usefull commands
 
 ``` bash
 # Create a namespace

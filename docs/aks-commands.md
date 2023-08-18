@@ -1,24 +1,40 @@
-# Autoscale Containers With Event Driven Workloads
+# Useful commands
 
-Setup for scaling .NET containers with event driven workloads.
-
-## Initialize AKS cluster with all KEDA related resources
-
-Run the [deployAll](\Powershell\deployAll.ps1) Powershell script which setup everything from AKS cluster, RabbitMQ, KEDA, Application services etc.
-
-``` PS
-.\deployAll.ps1
-```
-
-## Access RabbitMQ UI
+This file contains some useful commands to manage the AKS cluster.
 
 ``` bash
-kubectl port-forward svc/rabbitmq 15672:15672
+# How to reate a namespace
+kubectl create namespace genocs
+
+# To get info
+kubectl get deployments
+kubectl get nodes
+kubectl get services
+kubectl get pods
+kubectl get hpa
+kubectl get storageclass
+
+# Delete all resources **WARNING**
+kubectl delete --all storageclass
+kubectl delete --all services
+kubectl delete --all pods
+kubectl delete --all deployments
+kubectl delete --all nodes
+
+# Delete one single resource
+kubectl delete service 'service_name'
+kubectl delete deployment 'deployment_name'
+
+# Get the service state
+kubectl get service 'service_name' --watch
+kubectl get service 'service_name' -w
+
+# Run a deployment
+kubectl apply -f deployment-file.yaml
+
+# Delete a deployment
+kubectl delete -f deployment-file.yaml
 ```
-
-Access the RabbitMQ UI with credential `guest` & `guest`
-
-http://127.0.0.1:15672
 
 ## Get IP of Producer service
 
@@ -31,39 +47,15 @@ kubectl get svc rabbitmq-producer-service
 
 Got the IP as `20.195.103.121`
 
-## Produce messages on the RabbitMQ
-
-Use Postman to generate 5000 messages
-
 ``` bash
-http://20.195.103.121/api/TechTalks/Generate?numberOfMessages=5000
-```
-
-Other options can also be used to produce messages like hitting the above url directly from browser or using command line utilities like ```curl``` or ```wget```
-
-## Watch the rabbitmq-consumer scale
-
-``` bash
-kubectl get pods --watch
-kubectl get deploy --watch
-```
-
-## Scale consumer deployment to 2 replicas
-
-``` bash
+# Scale consumer deployment to 2 replicas
 kubectl scale deployment rabbitmq-consumer-deployment --replicas=2
-```
 
-## Create HPA with 75% CPU usage
-
-``` bash
+# Create HPA with 75% CPU usage
 kubectl autoscale deployment rabbitmq-consumer-deployment --cpu-percent=75 --min=1 --max=10
-```
 
-## Verify KEDA Custom Resource Definitions
-
-``` bash
-kubectl get crd
+# Delete HPA
+kubectl delete hpa rabbitmq-consumer-deployment
 ```
 
 ## Delete KEDA Autoscaler
@@ -72,17 +64,17 @@ kubectl get crd
 .\teardownAutoScaler.ps1
 ```
 
-## Delete HPA
+## Verify KEDA Custom Resource Definitions
 
 ``` bash
-kubectl delete hpa rabbitmq-consumer-deployment
+kubectl get crd
 ```
 
-helm
 
+helm
 ---
 
-useful commands
+Helm commands
 
 ``` bash
 # Get the helm version

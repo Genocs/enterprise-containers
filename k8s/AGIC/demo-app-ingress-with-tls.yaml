@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-app-ingress
+  namespace: demo-app
+  labels:
+    name: demo-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    cert-manager.io/cluster-issuer: letsencrypt-staging-cluster-issuer
+    cert-manager.io/acme-challenge-type: http01
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: demo-external-producer-service
+                port:
+                  number: 80
+
+      host: genocs-aks.westeurope.cloudapp.azure.com
+  tls:
+    - hosts:
+        - genocs-aks.westeurope.cloudapp.azure.com
+      secretName: tls-secret
