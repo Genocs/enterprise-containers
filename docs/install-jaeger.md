@@ -16,7 +16,7 @@ The installation of `cert-manager` is very simple as you can see from the Gettin
 To install all `cert-manager` components, just run:
 
 ``` sh
-# Please the latest version
+# Please check the latest version
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.0/cert-manager.yaml
 ```
 
@@ -61,11 +61,7 @@ The Jaeger Tracing provides instructions on how to install the operator on Kuber
 
 ``` sh
 kubectl create ns observability
-```
-
-To install the Customer Resource Definition:
-
-``` sh
+# To install the Customer Resource Definition:
 kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.36.0/jaeger-operator.yaml -n observability
 ```
 

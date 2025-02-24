@@ -19,13 +19,13 @@ This directory contains helm charts for deploying the various components of the 
 
 1. Created a new helm chart called helloworld
 2. Deployed to the cluster
-3. created secret and updated cluster settings
+3. Created secret and updated cluster settings
 
 ### demoapp
 
 1. Created a new helm chart called demoapp
 2. Deployed to the cluster
-3. created secret and updated cluster settings
+3. Created secret and updated cluster settings
 
 
 helm install hello_app ./helloworld --values ./helloworld/values.yaml

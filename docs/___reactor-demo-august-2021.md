@@ -7,7 +7,7 @@ Clone the repo for .Net Core application
 
 Switch to powershell directory and run the `deployAll.ps1` script
 
-This sets up the AKS cluster with default 3 nodes and deploys TechTalks application with all its services and dependencies including RabbitMQ, KEDA, TechTalksProducer and TechTalksConsumer.
+This sets up the AKS cluster with default 3 nodes and deploys Demo application with all its services and dependencies including RabbitMQ, KEDA, Producer and Consumer.
 
 Clone the repo for Spring Boot application
 [spring-boot-conference-app](https://github.com/NileshGule/spring-boot-conference-app)
@@ -81,7 +81,7 @@ for i in `seq 1 20`; do curl http://20.197.112.18:8080/api/v1/crash/boom; done
 
 ```
 
-``` powershell
+``` ps
 for ($i =0; $i -lt 10; $i++)
 {
     Invoke-WebRequest http://20.197.112.18:8080/api/v1/crash/boom

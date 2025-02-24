@@ -140,7 +140,7 @@ for i in `seq 1 20`; do curl http://20.44.232.28:8080/api/v1/crash/boom; done
 20.44.232.28
 ```
 
-``` PS
+``` powershell
 for ($i =0; $i -lt 10; $i++)
 {
     Invoke-WebRequest http://40.119.248.189:8080/api/v1/crash/boom
